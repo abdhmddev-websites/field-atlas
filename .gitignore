@@ -1,0 +1,8 @@
+# not part of the published site
+.claude/
+legacy/
+data-preview.html
+council-*
+design/
+*.zip
+node_modules/

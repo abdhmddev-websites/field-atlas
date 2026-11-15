@@ -1,0 +1,13 @@
+{
+  "name": "Field Atlas",
+  "short_name": "Field Atlas",
+  "description": "Faculties, majors and university roadmaps — Arabic and English.",
+  "start_url": "./#/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f3ec",
+  "theme_color": "#10271f",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
