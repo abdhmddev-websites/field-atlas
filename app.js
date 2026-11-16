@@ -259,7 +259,7 @@ function home() {
   <ul class="stats" aria-label="${u('statsLabel')}">${STATS().map(([n, l]) => `<li><b><span aria-hidden="true" data-count="${n}">${n}</span><span class="sr">${n}</span></b><span>${l}</span></li>`).join('')}</ul>
   <div class="sec-head"><div><div class="eyebrow">${u('navStart')}</div><h2>${u('startTitle')}</h2><p class="muted" style="margin:4px 0 0;max-width:680px">${u('startText')}</p></div></div>
   <ol class="path-cards">${PATH.map((p, i) => `<li><a class="feat" href="${p.h}"><span class="feat-ico" aria-hidden="true">${i + 1}</span><b>${u(p.n)}</b><small>${u(p.d)}</small><span class="go">${u('open')} ${lang === 'ar' ? '←' : '→'}</span></a></li>`).join('')}</ol>
-  <a class="card sk-home" href="#/skills"><span class="sk-ico" aria-hidden="true">🧩</span><span><b>${u('skTitle')}</b><small class="muted">${u('skText')}</small></span><span class="go">${u('open')} ${lang === 'ar' ? '←' : '→'}</span></a>`;
+  ${window.ATLAS.homePages ? window.ATLAS.homePages() : ''}`;
 }
 
 function techRoute() {
@@ -930,7 +930,7 @@ function route(opts = {}) {
   const here = PATH.findIndex(p => p.k.includes(parts[0] || '-'));
   const SD = window.ATLAS.stepState || (() => '');
   $('nav').innerHTML = PATH.map((p, i) => { const s = SD(i); return `<a href="${p.h}" class="${i === here ? 'on' : ''} ${s}"${i === here ? ' aria-current="page"' : ''}><span class="nnum" aria-hidden="true">${s === 'done' ? '✓' : s === 'locked' ? '🔒' : i + 1}</span>${u(p.n)}${s ? `<span class="sr"> (${u(s === 'done' ? 'stDone' : 'stLocked')})</span>` : ''}</a>`; }).join('')
-    + `<a href="#/lesson/1" class="nav-present${page === 'lesson' ? ' on' : ''}">${u('navLesson')}</a>`;
+    + `<a href="#/teacher" class="nav-present${['teacher', 'plan', 'ws', 'class', 'lesson'].includes(page) ? ' on' : ''}"><span aria-hidden="true">★</span> ${u('navTeacher')}</a>`;
   document.body.classList.toggle('presenting', page === 'lesson');
   if (page === 'road') bindRoadmap();
   if (page === 'home') { bindSearch(); const mb = $('mqBtn'); mb.onclick = () => { const p = mb.getAttribute('aria-pressed') !== 'true'; mb.setAttribute('aria-pressed', String(p)); document.querySelector('.marquee').classList.toggle('paused', p); }; }
@@ -1000,7 +1000,7 @@ function applyLang() {
   $('langBtn').textContent = u('switchLang');
   $('langBtn').setAttribute('lang', lang === 'ar' ? 'en' : 'ar');
   applyMotion();
-  $('foot').innerHTML = `<nav class="foot-links"><a href="#/money">${u('footMoney')}</a><a href="#/worksheet">${u('footWs')}</a><a href="#/skills">${u('navSkills')}</a><a href="#/types">${u('typesTitle')}</a><a href="#/reality">${u('rcPage')}</a><a href="#/future">${u('fuPage')}</a><a href="#/uni">${u('navUni')}</a><a href="#/plan">${u('planTitle')}</a><a href="#/compare/science/engineering">${u('openCompare')}</a></nav><p>${u('footer')} ${u('checkedNote')} ${C.checked}.</p>`;
+  $('foot').innerHTML = `<p>${u('footer')} ${u('checkedNote')} ${C.checked}.</p>`;
 }
 function setLang(l) {
   lang = l; langChosen = true;

@@ -65,7 +65,7 @@ function toc(root, page) {
   if (anchor) anchor.insertAdjacentElement('afterend', nav); else root.insertAdjacentElement('afterbegin', nav);
 }
 
-const ICON = { test: '◎', types: '◎', faculties: '⌂', decide: '⚖', roadmap: '➶', prepare: '✓', money: '€', ladder: '▤', uni: '✎', reality: '⚠', future: '↗', stories: '❝', class: '⬡', compare: '⇄', skills: '🧩' };
+const ICON = { test: '◎', types: '◎', faculties: '⌂', decide: '⚖', roadmap: '➶', prepare: '✓', money: '€', ladder: '▤', uni: '✎', reality: '⚠', future: '↗', stories: '❝', class: '⬡', compare: '⇄', skills: '🧩', teacher: '★' };
 A.ext.after.push((page, parts) => {
   const root = document.getElementById('app'); if (!root || page === 'lesson') return;
   const ph = root.querySelector('.phero, .test-intro'); const ic = ICON[(parts || [])[0]];
