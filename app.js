@@ -258,7 +258,8 @@ function home() {
   <div class="mq-wrap"><div class="marquee" aria-hidden="true"><div class="mq-track">${qs}${qs}</div></div><button type="button" class="mq-btn" id="mqBtn" aria-pressed="false">${u('pauseStrip')}</button></div>
   <ul class="stats" aria-label="${u('statsLabel')}">${STATS().map(([n, l]) => `<li><b><span aria-hidden="true" data-count="${n}">${n}</span><span class="sr">${n}</span></b><span>${l}</span></li>`).join('')}</ul>
   <div class="sec-head"><div><div class="eyebrow">${u('navStart')}</div><h2>${u('startTitle')}</h2><p class="muted" style="margin:4px 0 0;max-width:680px">${u('startText')}</p></div></div>
-  <ol class="path-cards">${PATH.map((p, i) => `<li><a class="feat" href="${p.h}"><span class="feat-ico" aria-hidden="true">${i + 1}</span><b>${u(p.n)}</b><small>${u(p.d)}</small><span class="go">${u('open')} ${lang === 'ar' ? '←' : '→'}</span></a></li>`).join('')}</ol>`;
+  <ol class="path-cards">${PATH.map((p, i) => `<li><a class="feat" href="${p.h}"><span class="feat-ico" aria-hidden="true">${i + 1}</span><b>${u(p.n)}</b><small>${u(p.d)}</small><span class="go">${u('open')} ${lang === 'ar' ? '←' : '→'}</span></a></li>`).join('')}</ol>
+  <a class="card sk-home" href="#/skills"><span class="sk-ico" aria-hidden="true">🧩</span><span><b>${u('skTitle')}</b><small class="muted">${u('skText')}</small></span><span class="go">${u('open')} ${lang === 'ar' ? '←' : '→'}</span></a>`;
 }
 
 function techRoute() {
@@ -523,7 +524,7 @@ function prepareView() {
   <div class="dest-grid">${P.dest.list.map(d => `<div class="card"><h3>${d.flag ? `<span aria-hidden="true">${d.flag}</span> ` : ''}${tx(d.where)}</h3><ul class="checks">${d.tests.map(x => `<li>${tx(x)}</li>`).join('')}</ul></div>`).join('')}</div>
   <p class="muted">${tx(P.dest.note)}</p>` : ''}
   <a class="card money-cta" href="#/money"><b>${u('moneyTitle')}</b><span class="muted">${u('moneyText')}</span><span class="go-link">${u('moneyLink')}</span></a>
-  <div class="card" style="margin:16px 0"><h3>${u('skillsT')}</h3><ul class="checks two">${P.skills.map(x => `<li>${tx(x)}</li>`).join('')}</ul></div>
+  <div class="card" style="margin:16px 0"><h3>${u('skillsT')}</h3><ul class="checks two">${P.skills.map(x => `<li>${tx(x)}</li>`).join('')}</ul><a class="go-link" href="#/skills">${u('skTitle')} ${lang === 'ar' ? '←' : '→'}</a></div>
   <div class="sec-head" style="margin-top:26px"><h2>${u('reqT')}</h2></div>
   <div class="req-grid">${faculties.map(f => { const r = P.req[f.id]; if (!r) return ''; return `<a class="card req-row" href="#/f/${f.id}" style="${accent(f)}">
     <span class="ico">${f.icon}</span><div><b>${tx(f.name)}</b>
@@ -999,7 +1000,7 @@ function applyLang() {
   $('langBtn').textContent = u('switchLang');
   $('langBtn').setAttribute('lang', lang === 'ar' ? 'en' : 'ar');
   applyMotion();
-  $('foot').innerHTML = `<nav class="foot-links"><a href="#/money">${u('footMoney')}</a><a href="#/worksheet">${u('footWs')}</a><a href="#/types">${u('typesTitle')}</a><a href="#/reality">${u('rcPage')}</a><a href="#/future">${u('fuPage')}</a><a href="#/uni">${u('navUni')}</a><a href="#/plan">${u('planTitle')}</a><a href="#/compare/science/engineering">${u('openCompare')}</a></nav><p>${u('footer')} ${u('checkedNote')} ${C.checked}.</p>`;
+  $('foot').innerHTML = `<nav class="foot-links"><a href="#/money">${u('footMoney')}</a><a href="#/worksheet">${u('footWs')}</a><a href="#/skills">${u('navSkills')}</a><a href="#/types">${u('typesTitle')}</a><a href="#/reality">${u('rcPage')}</a><a href="#/future">${u('fuPage')}</a><a href="#/uni">${u('navUni')}</a><a href="#/plan">${u('planTitle')}</a><a href="#/compare/science/engineering">${u('openCompare')}</a></nav><p>${u('footer')} ${u('checkedNote')} ${C.checked}.</p>`;
 }
 function setLang(l) {
   lang = l; langChosen = true;
