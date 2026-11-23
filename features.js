@@ -82,11 +82,11 @@ function guideBar(parts) {
     $('gShow').onclick = () => { gSet(true); guideBar(parts); if (A.placeSubNav) A.placeSubNav(parts); $('gExit').focus(); };
     return;
   }
-  const { u, esc, lang } = H(), arrowF = lang === 'ar' ? '←' : '→', arrowB = lang === 'ar' ? '→' : '←';
+  const { u, esc, lang } = H(), arrowF = A.go(), arrowB = A.back();
   const next = P[i + 1], prev = P[i - 1];
   const html = `<nav class="gbar" aria-label="${esc(u('startTitle'))}"><div class="gsteps" aria-hidden="true">${P.map((s, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>
     <p><b>${esc(u('gStep').replace('{n}', i + 1))}:</b> ${esc(u(P[i].d))}</p>
-    <div class="gbtns">${prev ? `<a class="btn ghost" href="${prev.h}">${arrowB} ${esc(u('gBack'))}</a>` : ''}${next ? (A.locksOn && A.locksOn() && i < 4 && !A.stepDone(i) ? `<span class="gtodo">🔒 ${esc(u('gTodo'))}: ${esc(u('need' + i))}</span>` : `<a class="btn" href="${next.h}">${esc(u('gNext'))}: ${esc(u(next.n))} ${arrowF}</a>`) : `<span class="gdone">${esc(u('gDone'))}</span>`}<button type="button" class="btn ghost" id="gExit">${esc(u('gExit')).replace(/ (.+)$/, '<span class="gx"> $1</span>')}</button></div></nav>`;
+    <div class="gbtns">${prev ? `<a class="btn ghost" href="${prev.h}">${arrowB} ${esc(u('gBack'))}</a>` : ''}${next ? (A.locksOn && A.locksOn() && i < 4 && !A.stepDone(i) ? `<span class="gtodo">${A.ic('lock')} ${esc(u('gTodo'))}: ${esc(u('need' + i))}</span>` : `<a class="btn ghost gnext" href="${next.h}">${esc(u('gNext'))}: ${esc(u(next.n))} ${arrowF}</a>`) : `<span class="gdone">${A.ic('check')} ${esc(u('gDone'))}</span>`}<button type="button" class="btn ghost gx-btn" title="${esc(u('gExit'))}" id="gExit">${A.ic('x')}<span class="sr">${esc(u('gExit'))}</span></button></div></nav>`;
   const app = $('app'); app.insertAdjacentHTML('afterbegin', html);
   $('gExit').onclick = () => { gSet(false); guideBar(parts); if (A.placeSubNav) A.placeSubNav(parts); $('gShow').focus(); };
 }
@@ -193,7 +193,7 @@ A.ext.routes.parent = {
     let r = null;
     try { const d = query && new URLSearchParams(query).get('d'); if (d) r = { ...h.RM0, ...JSON.parse(b64d(d)) }; } catch (e) { r = null; }
     const head = `<section class="view phero" style="padding:16px 0 10px"><h1 style="font-size:clamp(28px,4vw,42px);margin:6px 0 8px">${esc(u('parentTitle'))}</h1><p class="muted" style="max-width:720px;font-size:16px;margin:0">${esc(u('parentText'))}</p></section>`;
-    if (!r || !r.fid) return head + `<div class="warn">${esc(u('parentNone'))}</div>`;
+    if (!r || !r.fid) return head + `<div class="warn">${esc(u('parentNone'))}</div><div class="cta"><a class="btn" href="#/">${esc(u('navHome'))}</a><a class="btn ghost" href="#/money">${esc(u('moneyTitle'))}</a></div>`;
     const f = fac(r.fid), m = maj(f, r.mid), cc = k => k && C.countries[k] ? ` <span class="cc">${C.countries[k].code}</span> ${tx(C.countries[k].name)}` : '';
     const rows = [
       [u('faculty'), f ? T(f.name) : ''],

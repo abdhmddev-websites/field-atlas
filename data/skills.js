@@ -6,12 +6,12 @@ const sp = s => { const [en, ar] = s.split('|'); return { en, ar }; };
 const Ls = (...xs) => xs.map(sp);
 
 const types = [
-  { id: 'tech', icon: '🛠', color: '#c0703c', name: sp('Technical (hard) skills|المهارات التقنية (الصلبة)'), what: sp('Knowledge and abilities for a specific task. You can learn them in class or a course, and test them.|معرفة وقدرات لمهمة محدّدة. تتعلّمها في الصف أو في دورة، ويمكن اختبارها.'), note: sp('Some are "job-specific": medical rules for nurses, building codes for engineers. You learn those at university and at work.|بعضها «خاص بالمهنة»: قوانين طبية للممرّضين، قوانين البناء للمهندسين. تتعلّمها في الجامعة والعمل.') },
-  { id: 'digital', icon: '💻', color: '#3d6c9e', name: sp('Digital skills|المهارات الرقمية'), what: sp('Using technology well and safely: computers, software, the internet, AI tools.|استعمال التكنولوجيا جيدًا وبأمان: الحاسوب والبرامج والإنترنت وأدوات الذكاء الاصطناعي.') },
-  { id: 'people', icon: '🤝', color: '#4f8a8b', name: sp('People (soft) skills|مهارات التعامل مع الناس (الناعمة)'), what: sp('How you work with others: talking, listening, leading, helping a team.|كيف تعمل مع الآخرين: التحدّث والإصغاء والقيادة ومساعدة الفريق.') },
-  { id: 'thinking', icon: '🧠', color: '#5b4a7a', name: sp('Thinking (cognitive) skills|مهارات التفكير (الذهنية)'), what: sp('How your mind works on a problem: analysing, deciding, creating new ideas.|كيف يعمل عقلك على مشكلة: التحليل واتخاذ القرار وابتكار الأفكار.') },
-  { id: 'self', icon: '⏱', color: '#8c6d2e', name: sp('Self-management (life) skills|مهارات إدارة الذات (الحياتية)'), what: sp('How you manage yourself: time, stress, effort and change.|كيف تدير نفسك: الوقت والضغط والجهد والتغيير.') },
-  { id: 'lang', icon: '🗣', color: '#a0577e', name: sp('Language skills|المهارات اللغوية'), what: sp('Reading, writing and speaking well in Arabic, English, French or another language.|القراءة والكتابة والتحدّث جيدًا بالعربية أو الإنجليزية أو الفرنسية أو لغة أخرى.') }
+  { id: 'tech', icon: 'hammer', color: '#c0703c', name: sp('Technical (hard) skills|المهارات التقنية (الصلبة)'), what: sp('Knowledge and abilities for a specific task. You can learn them in class or a course, and test them.|معرفة وقدرات لمهمة محدّدة. تتعلّمها في الصف أو في دورة، ويمكن اختبارها.'), note: sp('Some are "job-specific": medical rules for nurses, building codes for engineers. You learn those at university and at work.|بعضها «خاص بالمهنة»: قوانين طبية للممرّضين، قوانين البناء للمهندسين. تتعلّمها في الجامعة والعمل.') },
+  { id: 'digital', icon: 'monitor-smartphone', color: '#3d6c9e', name: sp('Digital skills|المهارات الرقمية'), what: sp('Using technology well and safely: computers, software, the internet, AI tools.|استعمال التكنولوجيا جيدًا وبأمان: الحاسوب والبرامج والإنترنت وأدوات الذكاء الاصطناعي.') },
+  { id: 'people', icon: 'handshake', color: '#4f8a8b', name: sp('People (soft) skills|مهارات التعامل مع الناس (الناعمة)'), what: sp('How you work with others: talking, listening, leading, helping a team.|كيف تعمل مع الآخرين: التحدّث والإصغاء والقيادة ومساعدة الفريق.') },
+  { id: 'thinking', icon: 'brain', color: '#5b4a7a', name: sp('Thinking (cognitive) skills|مهارات التفكير (الذهنية)'), what: sp('How your mind works on a problem: analysing, deciding, creating new ideas.|كيف يعمل عقلك على مشكلة: التحليل واتخاذ القرار وابتكار الأفكار.') },
+  { id: 'self', icon: 'calendar-check', color: '#8c6d2e', name: sp('Self-management (life) skills|مهارات إدارة الذات (الحياتية)'), what: sp('How you manage yourself: time, stress, effort and change.|كيف تدير نفسك: الوقت والضغط والجهد والتغيير.') },
+  { id: 'lang', icon: 'languages', color: '#a0577e', name: sp('Language skills|المهارات اللغوية'), what: sp('Reading, writing and speaking well in Arabic, English, French or another language.|القراءة والكتابة والتحدّث جيدًا بالعربية أو الإنجليزية أو الفرنسية أو لغة أخرى.') }
 ];
 
 const S = (id, type, name, what, get, use) => ({ id, type, name: sp(name), what: sp(what), get: Ls(...get), use: Ls(...use) });
@@ -96,18 +96,18 @@ const skills = [
 /* activities → skills they build */
 const A = (icon, name, ids) => ({ icon, name: sp(name), ids });
 const activities = [
-  A('⚜', 'Scouts|الكشّافة', ['leadership', 'teamwork', 'resilience', 'organisation', 'adaptability']),
-  A('⚽', 'Team sports|الرياضات الجماعية', ['teamwork', 'resilience', 'time', 'leadership']),
-  A('🎙', 'Debate club / Model UN|نادي المناظرات / نموذج الأمم المتحدة', ['speaking', 'critical', 'research', 'communication', 'conflict']),
-  A('🤖', 'Robotics / coding club|نادي الروبوتات / البرمجة', ['coding', 'problem', 'teamwork', 'creativity']),
-  A('❤', 'Volunteering|التطوّع', ['empathy', 'communication', 'teamwork', 'adaptability']),
-  A('🏛', 'Student council|مجلس الطلاب', ['leadership', 'conflict', 'speaking', 'organisation']),
-  A('📰', 'School newspaper / media|صحيفة المدرسة / الإعلام', ['design', 'communication', 'arabic', 'english', 'research']),
-  A('🎨', 'Art, music, theatre|الفن والموسيقى والمسرح', ['creativity', 'resilience', 'speaking']),
-  A('🔬', 'Science fair|معرض العلوم', ['lab', 'research', 'problem', 'creativity']),
-  A('💼', 'Part-time or summer job|عمل جزئي أو صيفي', ['time', 'communication', 'organisation', 'numeracy']),
-  A('🌐', 'Free online courses|دورات مجانية على الإنترنت', ['coding', 'office', 'ai', 'english']),
-  A('📚', 'Tutoring classmates|مساعدة الزملاء في الدروس', ['communication', 'empathy', 'speaking'])
+  A('tent', 'Scouts|الكشّافة', ['leadership', 'teamwork', 'resilience', 'organisation', 'adaptability']),
+  A('volleyball', 'Team sports|الرياضات الجماعية', ['teamwork', 'resilience', 'time', 'leadership']),
+  A('mic', 'Debate club / Model UN|نادي المناظرات / نموذج الأمم المتحدة', ['speaking', 'critical', 'research', 'communication', 'conflict']),
+  A('bot', 'Robotics / coding club|نادي الروبوتات / البرمجة', ['coding', 'problem', 'teamwork', 'creativity']),
+  A('heart', 'Volunteering|التطوّع', ['empathy', 'communication', 'teamwork', 'adaptability']),
+  A('vote', 'Student council|مجلس الطلاب', ['leadership', 'conflict', 'speaking', 'organisation']),
+  A('newspaper', 'School newspaper / media|صحيفة المدرسة / الإعلام', ['design', 'communication', 'arabic', 'english', 'research']),
+  A('drama', 'Art, music, theatre|الفن والموسيقى والمسرح', ['creativity', 'resilience', 'speaking']),
+  A('microscope', 'Science fair|معرض العلوم', ['lab', 'research', 'problem', 'creativity']),
+  A('briefcase', 'Part-time or summer job|عمل جزئي أو صيفي', ['time', 'communication', 'organisation', 'numeracy']),
+  A('globe', 'Free online courses|دورات مجانية على الإنترنت', ['coding', 'office', 'ai', 'english']),
+  A('library', 'Tutoring classmates|مساعدة الزملاء في الدروس', ['communication', 'empathy', 'speaking'])
 ];
 
 window.ATLAS.skills = { types, skills, activities };

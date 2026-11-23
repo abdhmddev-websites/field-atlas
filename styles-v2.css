@@ -269,8 +269,6 @@ html[data-motion=reduce] .mq-btn{display:none}
 :root[dir=rtl] .hex-n{font-size:15px}
 /* compare: major chips that are links look like links */
 a.pill{text-decoration:underline;text-decoration-color:var(--edge);text-underline-offset:3px}
-a.pill::after{content:' →'}
-:root[dir=rtl] a.pill::after{content:' ←'}
 /* footer targets */
 .foot-links a{display:inline-flex;align-items:center;min-height:28px}
 /* costs grid: 5 across on wide screens */
@@ -577,7 +575,7 @@ dialog.mini-dialog h2{font-size:20px;margin-bottom:6px}
 
 /* callouts: an accent edge + small info mark (shape, not colour alone) */
 .warn{border-inline-start:5px solid #d9a441;position:relative;padding-inline-start:46px}
-.warn::before{content:'i';position:absolute;inset-inline-start:14px;top:16px;width:22px;height:22px;border-radius:50%;background:#d9a441;color:#fff;font:800 14px/22px Georgia,serif;text-align:center}
+.warn::before{content:'';position:absolute;inset-inline-start:14px;top:16px;width:22px;height:22px;border-radius:50%;background:#d9a441;color:#fff;font:800 14px/22px Georgia,serif;text-align:center}
 .warn > b:first-child,.warn .split-lead{color:#7a5310}
 
 /* "On this page" jump row */
@@ -616,7 +614,6 @@ dialog.mini-dialog h2{font-size:20px;margin-bottom:6px}
 .sk-card h3{margin:4px 0}
 .sk-card h4{margin:12px 0 4px;font-size:14px;color:var(--forest)}
 .sk-list{margin:0;padding-inline-start:18px;display:grid;gap:3px}
-.sk-list.use li::marker{content:'➜ '}
 .sk-have{margin-top:auto;padding-top:12px;display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
 .sk-have input{width:18px;height:18px;accent-color:var(--forest)}
 .sk-acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
@@ -717,3 +714,124 @@ summary{min-height:32px}
   .crumbs{padding-top:8px}
 }
 .crumbs{align-items:center}
+
+/* ================= UX round (v38): Lucide icons, hierarchy, navigation, journey ================= */
+:root{--m-check:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");--m-chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");--m-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E")}
+
+/* icons: one set, one stroke */
+.ic{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.22em;overflow:visible}
+[dir=rtl] .ic-dir{transform:scaleX(-1)}
+.ico .ic,.feat-ico .ic,.sk-ico .ic,.brand .ic,.lp-icon .ic,.qcard .ico .ic{width:22px;height:22px;vertical-align:0}
+.rnode i .ic{width:17px;height:17px;vertical-align:0}
+.mq-item i .ic{width:16px;height:16px}
+.nav .nnum .ic{width:14px;height:14px;stroke-width:2.75;vertical-align:0}
+.gate-ico .ic{width:44px;height:44px}
+.bub .ic{stroke:#fff;vertical-align:0}
+.btn,.go,.go-link,.linkbtn,.subtab,.pill-btn{gap:7px}
+.btn .ic,.go .ic,.go-link .ic{vertical-align:0}
+.go{display:inline-flex;align-items:center}
+.eyebrow .ic{width:16px;height:16px}
+.card h2 .ic,.card h3 .ic{color:color-mix(in srgb,var(--accent) 70%,#000)}
+.rcard .logo,.ws-head .logo{display:inline-flex;align-items:center;gap:6px}
+.util-teacher,.motion-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--forest)}
+.util-teacher i,.motion-btn i{display:inline-flex;font-style:normal}
+.util-teacher.on{background:var(--forest);color:var(--lime)}
+.warn::before{background:#8a5f12;-webkit-mask:var(--m-info) center/22px no-repeat;mask:var(--m-info) center/22px no-repeat;border-radius:0}
+summary{list-style:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+summary::-webkit-details-marker{display:none}
+summary::before{content:'';flex:none;width:18px;height:18px;background:currentColor;-webkit-mask:var(--m-chev) center/18px no-repeat;mask:var(--m-chev) center/18px no-repeat;transform:rotate(-90deg)}
+[dir=rtl] summary::before{transform:rotate(90deg)}
+details[open]>summary::before{transform:none!important}
+/* page marks (decorative) */
+.phero[data-icon]::after,html[data-motion=full] .phero[data-icon]::after,.fhero::after,html[data-motion=full] .fhero::after,.mhead::after,html[data-motion=full] .mhead::after{content:none;display:none}
+.pmark{position:absolute;inset-inline-end:28px;top:50%;transform:translateY(-50%);z-index:-1;color:var(--forest);opacity:.1;pointer-events:none;line-height:0}
+.pmark .ic{width:104px;height:104px;stroke-width:1.25}
+.fhero{isolation:isolate}.fhero .pmark{color:var(--lime);opacity:.22}
+/* type scale: 14 small, 15 body, 18 card title, 24 section, 44 page */
+h2.h3,.card>h3,.card h2.h3,.rs-h,.type-card h3,.year h3,.dest-grid h3,.ctry-grid h3,.req-card h3,.sk-act h3,.ctry-card h3,.step h2.h3{font-size:18px;line-height:1.35}
+.sec-head h2,.uni-h{font-size:24px;line-height:1.25}
+.sec-head{margin-top:34px;margin-bottom:12px}
+.view+.sec-head,.phero+.sec-head,.toc+.sec-head{margin-top:20px}
+.mcard b{font-size:18px;line-height:1.35}
+.mcard small,.fcard q,.ctry-grid p,.cost-card p,.schol-row small,.req-row small,.sk-tag,.sk-chips li,.btn.sm,.lang,.eyebrow,.pill{font-size:14px}
+.mcard .go{font-size:14px}
+.cc,.uni-table thead th{font-size:13px}
+:root[dir=rtl] .mcard small,:root[dir=rtl] .ctry-grid p,:root[dir=rtl] .cost-card p,:root[dir=rtl] .pill,:root[dir=rtl] .sk-chips li,:root[dir=rtl] .btn.sm,:root[dir=rtl] .sk-tag,:root[dir=rtl] .lang,:root[dir=rtl] .eyebrow,:root[dir=rtl] .fcard q,:root[dir=rtl] .mcard .go,:root[dir=rtl] .schol-row small,:root[dir=rtl] .req-row small{font-size:15px}
+/* labels are tags, links are pills: they no longer look the same */
+span.pill{border-radius:7px;background:var(--soft);padding:3px 9px}
+a.pill{border:1.5px solid var(--edge);background:var(--white);border-radius:99px;text-decoration:none;font-weight:600;color:var(--forest)}
+a.pill:hover{background:var(--soft);border-color:var(--forest)}
+/* quiet actions (reset, undo) never compete with the main one */
+.btn.quiet{background:transparent;border:0;color:var(--muted);font-weight:600;text-decoration:underline;text-underline-offset:4px;padding-inline:8px}
+.rcard .btn.quiet{color:var(--sage)}
+/* header: one utility row + one step row */
+.nav .nav-present{display:none}
+.top .util-teacher{margin-inline-start:auto}
+.top .wrap .motion-btn{margin-inline-start:0}
+.nav .nnum{vertical-align:middle}
+.nav a.on{font-weight:700}
+/* step bar: slim, the menu already shows progress */
+.gbar{padding:8px 10px;padding-inline-start:18px;margin:12px 0 8px;border-radius:14px}
+.gbar .gsteps{display:none}
+.gbar .btn{padding:6px 12px;min-height:40px}
+.gbar .btn.gnext{background:transparent;color:var(--lime);border-color:var(--lime)}
+.gx-btn{padding:6px 9px!important;border-color:transparent!important}
+/* tabs of this step: a quiet row, plus the shortlist at its end */
+.subnav{background:none;border:0;padding:0;margin:0 0 14px;align-items:center}
+.subtab{background:transparent;border-color:var(--line);padding:8px 14px}
+.subtab.on{border-color:var(--forest)}
+.short-chip{margin-inline-start:auto;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:6px 14px;border-radius:12px;border:1.5px solid var(--moss);font-weight:700;color:var(--forest);text-decoration:none;background:var(--white)}
+.short-chip:hover{background:var(--soft)}
+.phero,.phero[data-icon]{margin-top:0;margin-bottom:16px}
+.crumbs{padding:4px 0 10px}
+/* end of a step */
+.next-step{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 10px;padding:16px 20px;border-radius:16px;background:var(--soft);border:1px solid var(--line)}
+.next-step b{font:800 18px var(--display);color:var(--forest)}
+.next-step .btn{min-height:44px}
+/* home: step cards */
+.path-cards{grid-template-columns:repeat(4,1fr);margin-bottom:30px}
+.path-cards li.pcard{display:flex;flex-direction:column;gap:6px;position:relative;margin:0;padding:18px}
+.pcard h3{font-size:18px;margin:4px 0 0}
+.pcard p{margin:0;color:var(--muted);font-size:15px;line-height:1.5}
+.pc-top{display:flex;align-items:center;gap:10px}
+.pc-ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--forest);color:var(--lime)}
+.pc-ico .ic{width:22px;height:22px;vertical-align:0}
+.pc-num{font-size:14px;color:var(--muted);font-weight:600}
+.pc-done{margin-inline-start:auto;display:inline-flex;align-items:center;gap:4px;font-size:14px;font-weight:700;color:#1d5a3e}
+.pc-main{color:inherit;text-decoration:none}
+.pc-main::after{content:'';position:absolute;inset:0;border-radius:18px}
+.pcard:hover{border-color:var(--moss)}
+.pc-main:focus-visible{outline:none}.pcard:has(.pc-main:focus-visible){outline:3px solid var(--forest);outline-offset:2px}
+.pc-sub{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--line);display:grid}
+.pc-sub a{position:relative;z-index:1;display:flex;align-items:center;gap:8px;min-height:36px;font-weight:600;font-size:15px;color:var(--forest);text-decoration:none}
+.pc-sub a:hover{text-decoration:underline;text-underline-offset:4px}
+.pc-teacher{background:var(--soft);box-shadow:none}
+.stats{margin-top:22px}
+/* faculties: badge only the exception */
+.fcard .meta{align-items:center;flex-wrap:wrap}
+.match{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:7px;background:#dff0d8;color:#1d5a3e;font-size:14px;font-weight:700}
+/* costs: level in words */
+.cost-card .lvl{display:flex;align-items:center;gap:8px;margin:4px 0 10px;font-weight:600;color:var(--forest)}
+.lvl-bar{display:inline-flex;gap:3px}.lvl-bar i{width:16px;height:8px;border-radius:3px;background:#fff;border:1.5px solid var(--edge)}.lvl-bar i.on{background:var(--forest);border-color:var(--forest)}
+.ctry-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))}
+.tech-uni{display:flex;gap:8px;align-items:flex-start}.tech-uni .ic{margin-top:.2em}
+.mcard{display:flex;flex-direction:column}
+.res-acts{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+/* nothing loops for ever */
+html[data-motion=full] .hero2 .bub,html[data-motion=full] .aurora i{animation-iteration-count:2!important}
+@media (max-width:1180px){.path-cards{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.path-cards{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .util-teacher{display:none}
+  .nav .nav-present{display:flex}
+  .nav .nav-present .ic{width:20px;height:20px}
+  .pmark{display:none}
+  .gbar{padding:8px 12px}
+  .subnav{gap:6px}
+  .subtab{padding:8px 10px}
+  .short-chip{grid-column:1/-1;margin:0;justify-content:center;min-height:44px}
+  .subtab:last-child:nth-child(odd){grid-column:auto}
+  .subnav:not(:has(.short-chip)) .subtab:last-child:nth-child(odd){grid-column:1/-1}
+  .next-step{flex-direction:column;align-items:stretch;text-align:center}.next-step .btn{justify-content:center}
+}
+@media print{.next-step,.short-chip{display:none}}

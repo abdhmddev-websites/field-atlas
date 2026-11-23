@@ -79,7 +79,7 @@ const majors = [
 ];
 
 A.faculties.push({
-  id: 'vocational', icon: '⚒', color: '#6a6f2e', status: 'full',
+  id: 'vocational', icon: 'wrench', color: '#6a6f2e', status: 'full',
   name: t('Technical & vocational routes', 'المسارات الفنية والمهنية'),
   question: t('How can I learn a skill and start working sooner?', 'كيف أتعلّم مهارة وأبدأ العمل أسرع؟'),
   think: t('Technical students learn by doing: workshops, internships and real clients. Many start earning early and can still move on to university later.', 'طلاب المسار الفني يتعلّمون بالممارسة: المشاغل والتدريب والزبائن الحقيقيون. كثيرون يبدأون الكسب باكرًا ويستطيعون الانتقال إلى الجامعة لاحقًا.'),

@@ -55,13 +55,13 @@ const ladder = {
         what: t('A first trade (electricity, mechanics, hairdressing, cooking…). Leads to work, or to the BT.', 'مهنة أولى (كهرباء، ميكانيك، تزيين، طبخ…). تقود إلى العمل، أو إلى BT.') },
       { code: 'BT', name: t('Baccalauréat Technique (Technical Bac)', 'البكالوريا الفنية'), when: t('After Grade 9 (Brevet) or the BP', 'بعد الصف التاسع (البريفيه) أو BP'), years: t('3 years (BT1, BT2, BT3) ≈ Grades 10–12', '3 سنوات (BT1 وBT2 وBT3) ≈ من الأول إلى الثالث ثانوي'),
         what: t('A technical specialty plus general subjects. It is the technical version of the Bac.', 'اختصاص فني مع مواد عامة. هي النسخة الفنية من البكالوريا.'),
-        uni: t('🎓 First door to university: with a BT you can apply to university, usually to majors close to your specialty.', '🎓 أول باب إلى الجامعة: مع BT يمكنك التقدّم إلى الجامعة، غالبًا في اختصاصات قريبة من اختصاصك.') },
+        uni: t('First door to university: with a BT you can apply to university, usually to majors close to your specialty.', 'أول باب إلى الجامعة: مع BT يمكنك التقدّم إلى الجامعة، غالبًا في اختصاصات قريبة من اختصاصك.') },
       { code: 'TS', name: t('Technicien Supérieur (Higher Technician)', 'الامتياز الفني'), when: t('After the BT or the Lebanese Bac (Grade 12)', 'بعد BT أو الشهادة الثانوية اللبنانية (الثالث ثانوي)'), years: t('2–3 years ≈ first university years', '2–3 سنوات ≈ السنوات الجامعية الأولى'),
         what: t('Higher technician diploma, very practical, with internships. Many graduates start working straight away.', 'شهادة تقني عالٍ، تطبيقية جدًا مع تدريب عملي. كثير من الخرّيجين يبدأون العمل مباشرة.'),
-        uni: t('🎓 Second door: some universities count part of the TS towards a bachelor in the same field.', '🎓 الباب الثاني: بعض الجامعات تحتسب جزءًا من TS لإجازة في المجال نفسه.') },
+        uni: t('Second door: some universities count part of the TS towards a bachelor in the same field.', 'الباب الثاني: بعض الجامعات تحتسب جزءًا من TS لإجازة في المجال نفسه.') },
       { code: 'LT', name: t('Licence Technique (Technical bachelor)', 'الإجازة الفنية'), when: t('After the TS', 'بعد TS'), years: t('About 1 year', 'نحو سنة واحدة'),
         what: t('Completes the TS into a bachelor-level degree.', 'تُكمل TS لتصبح شهادة بمستوى الإجازة.'),
-        uni: t('🎓 Third door: after the LT you can apply for a master, like any bachelor graduate.', '🎓 الباب الثالث: بعد LT يمكنك التقدّم إلى الماستر، مثل أيّ خرّيج إجازة.') }
+        uni: t('Third door: after the LT you can apply for a master, like any bachelor graduate.', 'الباب الثالث: بعد LT يمكنك التقدّم إلى الماستر، مثل أيّ خرّيج إجازة.') }
     ],
     note: t('General guidance: years and names can differ by school and specialty. Check with the Directorate General of Vocational and Technical Education (DGVTE) and the school.', 'إرشاد عام: قد تختلف المدّة والأسماء بحسب المدرسة والاختصاص. تحقّق مع المديرية العامة للتعليم المهني والتقني والمدرسة.')
   },
@@ -76,7 +76,7 @@ const faculties = [
 
 /* ===== 1. SCIENCE (full) ===== */
 {
-  id: 'science', icon: '⚛', color: '#3f7d6a', status: 'full',
+  id: 'science', icon: 'atom', color: '#3f7d6a', status: 'full',
   name: t('Faculty of Science', 'كلية العلوم'),
   question: t('Why does the world work this way?', 'لماذا يعمل العالم بهذه الطريقة؟'),
   think: t('Scientists explain. They ask a question, build a model, test it with experiments or proofs, and accept being wrong until the evidence is strong.',
@@ -205,7 +205,7 @@ const faculties = [
 
 /* ===== 2. ENGINEERING (full) ===== */
 {
-  id: 'engineering', icon: '⚙', color: '#c0703c', status: 'full',
+  id: 'engineering', icon: 'cog', color: '#c0703c', status: 'full',
   name: t('Faculty of Engineering', 'كلية الهندسة'),
   question: t('How can I build something that works?', 'كيف أبني شيئًا يعمل فعلًا؟'),
   think: t('Engineers build. They take science and mathematics and turn them into safe, working solutions — within a budget, a deadline and real-world limits.',
@@ -365,7 +365,7 @@ const faculties = [
 
 /* ===== 3–12. OUTLINE faculties (full content in Phase 3) ===== */
 {
-  id: 'health', icon: '✚', color: '#b4545a', status: 'outline',
+  id: 'health', icon: 'stethoscope', color: '#b4545a', status: 'outline',
   name: t('Medicine & health sciences', 'الطب والعلوم الصحية'),
   question: t('How can I keep people healthy and treat them when they are sick?', 'كيف أحافظ على صحة الناس وأعالجهم عندما يمرضون؟'),
   think: t('Health professionals combine science with care. They diagnose, decide under pressure, follow strict ethics and keep learning their whole career.', 'العاملون في الصحة يجمعون العلم والرعاية. يشخّصون ويقرّرون تحت الضغط ويلتزمون بأخلاقيات صارمة ويتعلّمون طوال حياتهم المهنية.'),
@@ -373,7 +373,7 @@ const faculties = [
   majors: [['medicine','Medicine|الطب'],['dentistry','Dentistry|طب الأسنان'],['pharmacy','Pharmacy|الصيدلة'],['nursing','Nursing & midwifery|التمريض والقبالة'],['physiotherapy','Physiotherapy|العلاج الفيزيائي'],['nutrition','Nutrition & dietetics|التغذية وعلم الحمية'],['medical-lab','Medical laboratory sciences|علوم المختبرات الطبية'],['public-health','Public health|الصحة العامة'],['speech-therapy','Speech & occupational therapy|تقويم النطق والعلاج الانشغالي']]
 },
 {
-  id: 'computing', icon: '⌘', color: '#3d6c9e', status: 'outline',
+  id: 'computing', icon: 'laptop', color: '#3d6c9e', status: 'outline',
   name: t('Computing & information technology', 'الحوسبة وتكنولوجيا المعلومات'),
   question: t('How can I make computers solve problems?', 'كيف أجعل الحاسوب يحلّ المشكلات؟'),
   think: t('Computing people break problems into small logical steps, build with code, test, fail, fix — and repeat.', 'أهل الحوسبة يقسّمون المشكلة إلى خطوات منطقية صغيرة، ويبنون بالبرمجة، ويختبرون ويخطئون ويصلحون — ثم يكرّرون.'),
@@ -381,7 +381,7 @@ const faculties = [
   majors: [['computer-science','Computer science|علوم الحاسوب'],['software-engineering','Software engineering|هندسة البرمجيات'],['information-technology','Information technology|تكنولوجيا المعلومات'],['information-systems','Information systems|نظم المعلومات'],['cybersecurity','Cybersecurity|الأمن السيبراني'],['data-science','Data science|علم البيانات'],['artificial-intelligence','Artificial intelligence|الذكاء الاصطناعي']]
 },
 {
-  id: 'business', icon: '▲', color: '#8c6d2e', status: 'outline',
+  id: 'business', icon: 'chart-column', color: '#8c6d2e', status: 'outline',
   name: t('Business & economics', 'إدارة الأعمال والاقتصاد'),
   question: t('How do organizations and markets create value?', 'كيف تخلق المؤسسات والأسواق القيمة؟'),
   think: t('Business people read numbers and people, take calculated risks and turn ideas into organizations.', 'أهل الأعمال يقرؤون الأرقام والناس، ويخاطرون بحساب، ويحوّلون الأفكار إلى مؤسسات.'),
@@ -389,7 +389,7 @@ const faculties = [
   majors: [['management','Business management|إدارة الأعمال'],['accounting','Accounting|المحاسبة'],['finance','Finance & banking|المالية والمصارف'],['marketing','Marketing|التسويق'],['economics','Economics|الاقتصاد'],['business-analytics','Business analytics & MIS|تحليلات الأعمال ونظم المعلومات الإدارية'],['hospitality','Hospitality & tourism management|إدارة الفنادق والسياحة'],['entrepreneurship','Entrepreneurship|ريادة الأعمال']]
 },
 {
-  id: 'law', icon: '⚖', color: '#5b4a7a', status: 'outline',
+  id: 'law', icon: 'gavel', color: '#5b4a7a', status: 'outline',
   name: t('Law & political science', 'الحقوق والعلوم السياسية'),
   question: t('What is fair, and how should society be governed?', 'ما العدل، وكيف يجب أن يُحكَم المجتمع؟'),
   think: t('Lawyers and political scientists argue with evidence and texts, see both sides of a case and write with precision.', 'المحامون وعلماء السياسة يحاججون بالأدلة والنصوص، ويرون وجهَي القضية، ويكتبون بدقة.'),
@@ -397,7 +397,7 @@ const faculties = [
   majors: [['law','Law|الحقوق'],['political-science','Political science|العلوم السياسية'],['international-relations','International relations|العلاقات الدولية'],['public-administration','Public administration|الإدارة العامة'],['criminology','Criminology|علم الجريمة']]
 },
 {
-  id: 'humanities', icon: '✎', color: '#7a5c45', status: 'outline',
+  id: 'humanities', icon: 'book-open', color: '#7a5c45', status: 'outline',
   name: t('Arts & humanities', 'الآداب والعلوم الإنسانية'),
   question: t('What do people think, write and believe — and why?', 'بماذا يفكّر الناس ويكتبون ويؤمنون — ولماذا؟'),
   think: t('Humanities people read deeply, interpret meaning, connect past and present and express ideas clearly.', 'أهل العلوم الإنسانية يقرؤون بعمق، ويفسّرون المعاني، ويربطون الماضي بالحاضر، ويعبّرون عن الأفكار بوضوح.'),
@@ -405,7 +405,7 @@ const faculties = [
   majors: [['arabic','Arabic language & literature|اللغة العربية وآدابها'],['english','English language & literature|اللغة الإنجليزية وآدابها'],['french','French language & literature|اللغة الفرنسية وآدابها'],['translation','Translation & interpreting|الترجمة'],['philosophy','Philosophy|الفلسفة'],['history','History|التاريخ'],['geography','Geography|الجغرافيا'],['archaeology','Archaeology|علم الآثار'],['religious-studies','Religious studies|الدراسات الدينية']]
 },
 {
-  id: 'social', icon: '◉', color: '#4f8a8b', status: 'outline',
+  id: 'social', icon: 'users-round', color: '#4f8a8b', status: 'outline',
   name: t('Social sciences & psychology', 'العلوم الاجتماعية وعلم النفس'),
   question: t('Why do people and groups behave the way they do?', 'لماذا يتصرّف الأفراد والجماعات بهذه الطريقة؟'),
   think: t('Social scientists observe people, listen carefully, measure behaviour and look for patterns without judging too quickly.', 'علماء الاجتماع والنفس يلاحظون الناس ويصغون جيدًا ويقيسون السلوك ويبحثون عن الأنماط من دون حكم متسرّع.'),
@@ -413,7 +413,7 @@ const faculties = [
   majors: [['psychology','Psychology|علم النفس'],['sociology','Sociology|علم الاجتماع'],['anthropology','Anthropology|علم الإنسان (الأنثروبولوجيا)'],['social-work','Social work|العمل الاجتماعي'],['library-science','Library & information science|علم المكتبات والمعلومات']]
 },
 {
-  id: 'education', icon: '✐', color: '#6f8f3d', status: 'outline',
+  id: 'education', icon: 'apple', color: '#6f8f3d', status: 'outline',
   name: t('Education', 'التربية'),
   question: t('How do people learn, and how can I help them learn better?', 'كيف يتعلّم الناس، وكيف أساعدهم على التعلّم بشكل أفضل؟'),
   think: t('Educators explain the same idea in many ways, stay patient, and watch each learner closely.', 'المربّون يشرحون الفكرة نفسها بطرق كثيرة، ويتحلّون بالصبر، ويراقبون كل متعلّم عن قرب.'),
@@ -421,7 +421,7 @@ const faculties = [
   majors: [['early-childhood','Early childhood education|تربية الطفولة المبكرة'],['elementary','Elementary education|التعليم الابتدائي'],['secondary','Secondary teaching (by subject)|التعليم الثانوي (حسب المادة)'],['special-education','Special education|التربية المختصة'],['educational-technology','Educational technology|تكنولوجيا التعليم'],['educational-leadership','Educational leadership|الإدارة التربوية'],['physical-education','Physical education & sport|التربية البدنية والرياضة']]
 },
 {
-  id: 'arts-design', icon: '◈', color: '#a0577e', status: 'outline',
+  id: 'arts-design', icon: 'palette', color: '#a0577e', status: 'outline',
   name: t('Fine arts, architecture & design', 'الفنون الجميلة والعمارة والتصميم'),
   question: t('How can I create spaces, images and objects that people feel?', 'كيف أبتكر أماكن وصورًا وأشياء يشعر بها الناس؟'),
   think: t('Designers and artists sketch, prototype, take critique and try again until form and meaning fit.', 'المصمّمون والفنانون يرسمون المسودات ويصنعون النماذج ويتقبّلون النقد ويحاولون من جديد حتى يتطابق الشكل مع المعنى.'),
@@ -429,7 +429,7 @@ const faculties = [
   majors: [['architecture','Architecture|العمارة'],['interior-design','Interior design|التصميم الداخلي'],['landscape','Landscape architecture|عمارة المناظر الطبيعية'],['urban-planning','Urban planning|التخطيط المدني'],['graphic-design','Graphic design|التصميم الغرافيكي'],['fine-arts','Fine arts (painting, sculpture)|الفنون التشكيلية'],['music','Music|الموسيقى'],['theatre','Theatre|المسرح'],['film','Film & audiovisual|السينما والسمعي البصري'],['fashion','Fashion design|تصميم الأزياء'],['product-design','Product design|تصميم المنتجات']]
 },
 {
-  id: 'media', icon: '◎', color: '#c2554a', status: 'outline',
+  id: 'media', icon: 'megaphone', color: '#c2554a', status: 'outline',
   name: t('Media & communication', 'الإعلام والاتصال'),
   question: t('How do I tell stories that inform and move people?', 'كيف أروي قصصًا تُعلِم الناس وتؤثّر فيهم؟'),
   think: t('Media people are curious, check facts, and shape a message for each audience and platform.', 'أهل الإعلام فضوليون، يتحقّقون من الحقائق، ويصوغون الرسالة لكل جمهور ومنصة.'),
@@ -437,7 +437,7 @@ const faculties = [
   majors: [['journalism','Journalism|الصحافة'],['radio-tv','Radio & television|الإذاعة والتلفزيون'],['pr-advertising','Public relations & advertising|العلاقات العامة والإعلان'],['digital-media','Digital media|الإعلام الرقمي']]
 },
 {
-  id: 'agriculture', icon: '❀', color: '#5f8a4a', status: 'outline',
+  id: 'agriculture', icon: 'sprout', color: '#5f8a4a', status: 'outline',
   name: t('Agriculture, food & veterinary', 'الزراعة والغذاء والطب البيطري'),
   question: t('How do we feed people and care for animals and land?', 'كيف نطعم الناس ونرعى الحيوانات والأرض؟'),
   think: t('Agriculture people combine biology, technology and business — in the field, the lab and the market.', 'أهل الزراعة يجمعون البيولوجيا والتكنولوجيا والأعمال — في الحقل والمختبر والسوق.'),

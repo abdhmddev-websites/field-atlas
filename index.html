@@ -209,7 +209,7 @@ body.presenting footer{display:none}
 .mini ol{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
 .mini li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;column-gap:10px}
 .mini li::before{content:counter(s);grid-row:span 2;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 13px var(--display)}
-.mini li:last-child::before{content:'★'}
+
 .mini small{color:var(--muted);font-size:12.5px}
 .mini b{font-size:16px;color:var(--forest)}
 .l5{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}
@@ -357,7 +357,7 @@ footer p{margin:0}
 .ygoal{margin:0 0 10px;color:#33463b}
 .checks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .checks li{position:relative;padding-inline-start:26px;line-height:1.5}
-.checks li::before{content:'✓';position:absolute;inset-inline-start:0;top:1px;width:18px;height:18px;border-radius:5px;background:var(--soft);color:var(--moss);font-size:12px;display:grid;place-items:center;font-weight:700}
+.checks li::before{content:'';position:absolute;inset-inline-start:0;top:1px;width:18px;height:18px;border-radius:5px;background:var(--soft);color:var(--moss);font-size:12px;display:grid;place-items:center;font-weight:700}
 .checks.two{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));column-gap:22px}
 .prep-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
 .prep-2 h3,.card>h3{font-size:16px;margin-bottom:10px}
@@ -397,51 +397,53 @@ footer p{margin:0}
   .ractions{display:none}
 }
 </style>
-<link rel="stylesheet" href="styles-v2.css?v=37">
+<link rel="stylesheet" href="styles-v2.css?v=38">
 </head>
 <body>
 <a class="skip no-print" id="skip" href="#app">Skip to the content</a>
 <header class="top no-print">
   <div class="wrap">
-    <a class="brand" href="#/"><i>◇</i><span id="brandName">Field Atlas</span></a>
+    <a class="brand" href="#/"><i data-ic="route"></i><span id="brandName">Field Atlas</span></a>
     <nav class="nav" id="nav"></nav>
-    <button class="lang motion-btn" id="motionBtn" type="button" aria-pressed="true"><i aria-hidden="true">✦</i><span>Motion</span></button>
+    <a class="lang util-teacher" id="teacherLink" href="#/teacher"><i data-ic="presentation"></i><span></span></a>
+    <button class="lang motion-btn" id="motionBtn" type="button" aria-pressed="true"><i data-ic="sparkles" aria-hidden="true"></i><span>Motion</span></button>
     <button class="lang" id="langBtn" type="button">English</button>
   </div>
 </header>
 <main class="wrap" id="app"></main>
 <footer class="no-print"><div class="wrap" id="foot"></div></footer>
 <script src="vendor/qrcode.min.js"></script>
-<script src="data/faculties.js?v=37"></script>
-<script src="data/full/health.js?v=37"></script>
-<script src="data/full/computing.js?v=37"></script>
-<script src="data/full/business.js?v=37"></script>
-<script src="data/full/law.js?v=37"></script>
-<script src="data/full/humanities.js?v=37"></script>
-<script src="data/full/social.js?v=37"></script>
-<script src="data/full/education.js?v=37"></script>
-<script src="data/full/arts-design.js?v=37"></script>
-<script src="data/full/media.js?v=37"></script>
-<script src="data/full/agriculture.js?v=37"></script>
-<script src="data/prepare.js?v=37"></script>
-<script src="data/countries.js?v=37"></script>
-<script src="data/personality.js?v=37"></script>
-<script src="data/money.js?v=37"></script>
-<script src="data/lesson.js?v=37"></script>
-<script src="data/uni.js?v=37"></script>
-<script src="data/insight.js?v=37"></script>
-<script src="data/insight2.js?v=37"></script>
-<script src="data/insight3.js?v=37"></script>
-<script src="data/skills.js?v=37"></script>
-<script src="data/full/vocational.js?v=37"></script>
-<script src="data/stories.js?v=37"></script>
-<script src="config/school.js?v=37"></script>
-<script src="features.js?v=37"></script>
-<script src="decide.js?v=37"></script>
-<script src="extras.js?v=37"></script>
-<script src="skills.js?v=37"></script>
-<script src="layout.js?v=37"></script>
-<script src="nav2.js?v=37"></script>
-<script src="app.js?v=37"></script>
+<script src="data/faculties.js?v=38"></script>
+<script src="icons.js?v=38"></script>
+<script src="data/full/health.js?v=38"></script>
+<script src="data/full/computing.js?v=38"></script>
+<script src="data/full/business.js?v=38"></script>
+<script src="data/full/law.js?v=38"></script>
+<script src="data/full/humanities.js?v=38"></script>
+<script src="data/full/social.js?v=38"></script>
+<script src="data/full/education.js?v=38"></script>
+<script src="data/full/arts-design.js?v=38"></script>
+<script src="data/full/media.js?v=38"></script>
+<script src="data/full/agriculture.js?v=38"></script>
+<script src="data/prepare.js?v=38"></script>
+<script src="data/countries.js?v=38"></script>
+<script src="data/personality.js?v=38"></script>
+<script src="data/money.js?v=38"></script>
+<script src="data/lesson.js?v=38"></script>
+<script src="data/uni.js?v=38"></script>
+<script src="data/insight.js?v=38"></script>
+<script src="data/insight2.js?v=38"></script>
+<script src="data/insight3.js?v=38"></script>
+<script src="data/skills.js?v=38"></script>
+<script src="data/full/vocational.js?v=38"></script>
+<script src="data/stories.js?v=38"></script>
+<script src="config/school.js?v=38"></script>
+<script src="features.js?v=38"></script>
+<script src="decide.js?v=38"></script>
+<script src="extras.js?v=38"></script>
+<script src="skills.js?v=38"></script>
+<script src="layout.js?v=38"></script>
+<script src="nav2.js?v=38"></script>
+<script src="app.js?v=38"></script>
 </body>
 </html>

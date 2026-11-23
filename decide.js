@@ -40,7 +40,7 @@ Object.assign(A.extUI = A.extUI || {}, {
   gateTxt: S('The path works in order, so each step uses what you did before. First finish step {n} — {name}:', 'المسار يسير بالترتيب، فكل خطوة تستعمل ما فعلته قبلها. أنهِ أولًا الخطوة {n} — {name}:'),
   gateGo: S('Go to step {n}', 'انتقل إلى الخطوة {n}'),
   dAddBtn: S('Add to my decision balance', 'أضف إلى ميزان القرار'), dAddShort: S('+ Decision balance', '+ ميزان القرار'),
-  dAdded: S('✓ In my decision balance — go to step 3', '✓ في ميزان القرار — انتقل إلى الخطوة 3'), dAddedShort: S('✓ Added', '✓ أُضيف'),
+  dAdded: S('In my decision balance — go to step 3', 'في ميزان القرار — انتقل إلى الخطوة 3'), dAddedShort: S('Added', 'أُضيف'),
   dFull: S('Your decision balance is full (5 majors)', 'ميزان القرار ممتلئ (5 اختصاصات)'),
   dList: S('My shortlist', 'لائحتي'), dGo3: S('Go to step 3: Decision balance', 'انتقل إلى الخطوة 3: ميزان القرار'), dNeed2: S('add at least 2 to go on', 'أضف اختصاصين على الأقل لتتابع'),
   dPressure: S('Your parents and friends count for {n}% of your decision. Is this choice yours or theirs? Talk about it with them and with your teacher.', 'أهلك ورفاقك يمثّلون {n}% من قرارك. هل هذا الخيار لك أم لهم؟ تحدّث عن ذلك معهم ومع أستاذك.'),
@@ -109,14 +109,14 @@ A.gate = si => {
   if (si > 4 || !A.locksOn()) return null;
   const j = [0, 1, 2, 3].find(k => k < si && !A.stepDone(k)); if (j === undefined) return null;
   const h = H(), { u, esc } = h, P = h.PATH[j];
-  return `<section class="view card gate"><div class="gate-ico" aria-hidden="true">🔒</div><h1>${esc(u('gateT'))}</h1>
+  return `<section class="view card gate"><div class="gate-ico" aria-hidden="true">${A.ic('lock')}</div><h1>${esc(u('gateT'))}</h1>
     <p>${esc(u('gateTxt').replace('{n}', j + 1).replace('{name}', u(P.n)))}</p><p class="gate-need"><b>${esc(u('need' + j))}</b></p>
     <a class="btn" href="${P.h}">${esc(u('gateGo').replace('{n}', j + 1))}</a></section>`;
 };
 A.decideBtn = (f, m, small) => {
   const { u, esc } = H(), k = f.id + '/' + m.id, has = A.decide.has(k), full = !has && load().c.length >= 5;
   const label = has ? (small ? 'dAddedShort' : 'dAdded') : full ? 'dFull' : (small ? 'dAddShort' : 'dAddBtn');
-  return `<button type="button" class="${small ? 'go linkbtn' : 'btn'}${has ? ' added' : ''}" data-dadd="${esc(k)}"${full ? ' disabled' : ''}>${esc(u(label))}</button>`;
+  return `<button type="button" class="${small ? 'go linkbtn' : 'btn'}${has ? ' added' : ''}" data-dadd="${esc(k)}"${full ? ' disabled' : ''}>${A.ic(has ? 'check' : 'plus')} ${esc(u(label))}</button>`;
 };
 document.addEventListener('click', e => {
   const b = e.target.closest && e.target.closest('[data-dadd]'); if (!b) return;
@@ -125,31 +125,19 @@ document.addEventListener('click', e => {
   A.decide.add(k); H().rerender();
   const nb = document.querySelector(`[data-dadd="${CSS.escape(k)}"]`); if (nb) nb.focus();
 });
-/* shortlist bar on the step-2 pages */
-A.ext.after.push((page, parts) => {
-  const old = document.getElementById('dBar'); if (old) old.remove();
-  if (!['faculties', 'f', 'm', 'compare', 'reality', 'future', 'test'].includes(parts[0]) || page === 'gate') return;
-  if (parts[0] === 'test' && parts[1] !== 'result') return;
-  const h = H(), { u, esc, tx } = h, c = load().c; if (!c.length) return;
-  const names = c.map(k => { const [fid, mid] = k.split('/'), f = h.fac(fid), m = f && h.maj(f, mid); return m ? `<li>${f.icon} ${tx(m.name)}</li>` : ''; }).join('');
-  const bar = `<aside class="dbar${parts[0] === 'test' ? '' : ' dup'}" id="dBar" aria-label="${esc(u('dList'))}"><b>${esc(u('dList'))} <bdi>(${c.length}/5)</bdi></b><ul>${names}</ul>
-    ${c.length >= 2 ? `<a class="btn sm" href="#/decide">${esc(u('dGo3'))} ${h.lang === 'ar' ? '←' : '→'}</a>` : `<span class="muted">${esc(u('dNeed2'))}</span>`}</aside>`;
-  const g = document.querySelector('#app .gbar, #app .gshow'); if (g) g.insertAdjacentHTML('afterend', bar); else document.getElementById('app').insertAdjacentHTML('afterbegin', bar);
-});
-
 A.ext.routes.decide = {
   page: 'decide',
   view() {
     load();
     const h = H(), { u, tx, esc, lang } = h, L = k => esc(u(k));
     const total = F.reduce((n, [f]) => n + (+st.w[f] || 0), 0) || 1, pc = f => Math.round((+st.w[f] || 0) / total * 100);
-    const name = k => { const [fid, mid] = k.split('/'), f = h.fac(fid), m = f && h.maj(f, mid); return m ? `${f.icon} ${tx(m.name)}` : esc(k); };
+    const name = k => { const [fid, mid] = k.split('/'), f = h.fac(fid), m = f && h.maj(f, mid); return m ? `${A.ic(f.icon)} ${tx(m.name)}` : esc(k); };
     const opts = h.faculties.map(f => `<optgroup label="${esc(h.T(f.name))}">${f.majors.map(m => `<option value="${f.id}/${m.id}"${st.c.includes(f.id + '/' + m.id) ? ' disabled' : ''}>${esc(h.T(m.name))}</option>`).join('')}</optgroup>`).join('');
     const res = st.c.map(score).filter(x => x.pct !== null).sort((a, b) => b.pct - a.pct);
     const pressure = pc('parents') + pc('friends'), fname = f => L(F.find(x => x[0] === f)[1]);
     const why = x => {
       const up = [...x.parts].sort((a, b) => b.v * b.w - a.v * a.w)[0], down = [...x.parts].sort((a, b) => a.v - b.v || b.w - a.w)[0];
-      return `<small class="d-why">${up && up.v >= 4 ? `<span>▲ ${L('dWhyUp')}: ${fname(up.f)} (${up.v}/5)</span>` : ''}${down && down.v <= 2 ? `<span>▼ ${L('dWhyDown')}: ${fname(down.f)} (${down.v}/5)</span>` : ''}${x.missing.length ? `<span class="muted">${x.missing.map(fname).join(h.lang === 'ar' ? '، ' : ', ')}: ${L('dMissing')}</span>` : ''}</small>`;
+      return `<small class="d-why">${up && up.v >= 4 ? `<span>${A.ic('arrow-up')} ${L('dWhyUp')}: ${fname(up.f)} (${up.v}/5)</span>` : ''}${down && down.v <= 2 ? `<span>${A.ic('arrow-down')} ${L('dWhyDown')}: ${fname(down.f)} (${down.v}/5)</span>` : ''}${x.missing.length ? `<span class="muted">${x.missing.map(fname).join(h.lang === 'ar' ? '، ' : ', ')}: ${L('dMissing')}</span>` : ''}</small>`;
     };
     return `<div id="decideRoot"><div class="crumbs"><a href="#/">${L('navHome')}</a><span>${L('dTitle')}</span></div>
     <section class="view phero" style="padding:16px 0 10px"><div class="eyebrow">${L('navDecide')}</div><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('dTitle')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('dText')}</p></section>
@@ -160,7 +148,7 @@ A.ext.routes.decide = {
 
     <section class="card d-sec"><h2 class="h3">${L('d2')}</h2><p class="muted">${L('d2t')}</p>
       <div class="d-weights">${F.map(([f, key]) => `<div class="d-w"><label for="w_${f}">${L(key)}</label><input type="range" id="w_${f}" min="0" max="50" step="5" value="${st.w[f]}" data-act="w" data-val="${f}"><output id="o_${f}" for="w_${f}"><bdi>${pc(f)}%</bdi></output></div>`).join('')}</div>
-      <button type="button" class="btn ghost sm" data-act="wreset" data-val="x">${L('dReset')}</button>
+      <button type="button" class="btn quiet sm" data-act="wreset" data-val="x">${A.ic('rotate-ccw')} ${L('dReset')}</button>
       ${pressure > 40 ? `<p class="warn" role="note">${esc(u(pc('parents') && pc('friends') ? 'dPressure' : pc('parents') ? 'dPressP' : 'dPressF').replace('{n}', pressure))}</p>` : ''}${pc('me') < 15 ? `<p class="warn" role="note">${L('dLowMe')}</p>` : ''}</section>
 
     ${st.c.length ? `<section class="card d-sec"><h2 class="h3">${L('d3')}</h2><p class="muted">${L('d3t')}</p>
@@ -172,7 +160,7 @@ A.ext.routes.decide = {
 
     <section class="card d-sec d-result" aria-live="polite"><h2 class="h3">${L('d4')}</h2>
       ${res.length < 2 ? `<p class="muted">${L('dNeed')}</p>` : `<ol class="d-rank">${res.map((x, i) => `<li class="${i === 0 ? 'top' : ''}"><div class="d-row"><b>${name(x.k)}</b><span class="d-pct"><bdi>${x.pct}%</bdi></span></div>
-        <span class="bt"><i style="width:${x.pct}%"></i></span>${why(x)}${i === 0 ? `<a class="btn sm" href="#/roadmap/${x.k}" data-act="choose" data-val="${esc(x.k)}">${L('dBuild')} ${lang === 'ar' ? '←' : '→'}</a>` : ''}</li>`).join('')}</ol>
+        <span class="bt"><i style="width:${x.pct}%"></i></span>${why(x)}<a class="btn sm${i ? ' ghost' : ''}" href="#/roadmap/${x.k}" data-act="choose" data-val="${esc(x.k)}">${L('dBuild')} ${A.go()}</a></li>`).join('')}</ol>
         ${res[1] && res[0].pct - res[1].pct <= 5 ? `<p class="warn">${L('dClose')}</p>` : ''}`}
       <p class="muted" style="margin:10px 0 0">${L('dNote')}</p></section></div>`;
   },

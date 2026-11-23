@@ -37,10 +37,10 @@ A.insightBoxes = (f, m) => {
   const X = (A.insight || {})[m.id]; if (!X) return '';
   const { u, tx, esc } = H(), L = k => esc(u(k));
   return `<div class="ins-grid">
-    <section class="card ins-card ins-reality"><h2 class="h3">⚠ ${L('rcTitle')}</h2>
+    <section class="card ins-card ins-reality"><h2 class="h3">${A.ic('triangle-alert')} ${L('rcTitle')}</h2>
       <dl><dt>${L('rcNo')}</dt><dd>${tx(X.no)}</dd><dt>${L('rcHidden')}</dt><dd>${tx(X.hidden)}</dd><dt>${L('rcPivot')}</dt><dd>${tx(X.pivot)}</dd></dl>
       <a class="go-link" href="#/reality">${L('seeAll')}</a></section>
-    <section class="card ins-card ins-future"><h2 class="h3">↗ ${L('fuTitle')}</h2>
+    <section class="card ins-card ins-future"><h2 class="h3">${A.ic('trending-up')} ${L('fuTitle')}</h2>
       <p><b>${L('fuAdd')}:</b> ${tx(X.future)}</p><p class="muted">${L('fuFormulaTxt')}</p>
       <a class="go-link" href="#/future">${L('seeAll')}</a></section></div>`;
 };
@@ -49,7 +49,7 @@ const byFaculty = (render) => {
   const { tx } = H();
   return H().faculties.map((f, i) => {
     const list = f.majors.filter(m => (A.insight || {})[m.id]); if (!list.length) return '';
-    return `<details class="card ins-fac"${i === 0 ? ' open' : ''}><summary><h2 class="ins-h"><span aria-hidden="true">${f.icon}</span> ${tx(f.name)}</h2> <small class="muted">(${list.length})</small></summary>${list.map(m => render(f, m, A.insight[m.id])).join('')}</details>`;
+    return `<details class="card ins-fac"${i === 0 ? ' open' : ''}><summary><h2 class="ins-h">${A.ic(f.icon)} ${tx(f.name)}</h2> <small class="muted">(${list.length})</small></summary>${list.map(m => render(f, m, A.insight[m.id])).join('')}</details>`;
   }).join('');
 };
 
@@ -58,7 +58,7 @@ A.ext.routes.reality = {
   view() {
     const { u, tx, esc } = H(), L = k => esc(u(k));
     return `<div class="crumbs"><a href="#/faculties">${L('navFac')}</a><span>${L('rcPage')}</span></div>
-    <section class="view phero" style="padding:16px 0 10px"><div class="eyebrow">⚠ ${L('rcTitle')}</div><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('rcPage')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('rcText')}</p><p class="muted" style="margin:8px 0 0"><small>${L('reviewNote')}</small></p></section>
+    <section class="view phero" style="padding:16px 0 10px"><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('rcPage')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('rcText')}</p><p class="muted" style="margin:8px 0 0"><small>${L('reviewNote')}</small></p></section>
     ${byFaculty((f, m, X) => `<article class="ins-row"><h3><a href="#/m/${f.id}/${m.id}">${tx(m.name)}</a></h3>
       <dl><dt>${L('rcNo')}</dt><dd>${tx(X.no)}</dd><dt>${L('rcHidden')}</dt><dd>${tx(X.hidden)}</dd><dt>${L('rcPivot')}</dt><dd>${tx(X.pivot)}</dd></dl></article>`)}`;
   }
@@ -69,9 +69,9 @@ A.ext.routes.future = {
   view() {
     const { u, tx, esc, lang } = H(), L = k => esc(u(k)), T2 = p => esc(p[lang === 'ar' ? 1 : 0]);
     return `<div class="crumbs"><a href="#/faculties">${L('navFac')}</a><span>${L('fuPage')}</span></div>
-    <section class="view phero" style="padding:16px 0 10px"><div class="eyebrow">↗ ${L('fuTitle')}</div><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('fuPage')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('fuText')}</p></section>
+    <section class="view phero" style="padding:16px 0 10px"><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('fuPage')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('fuText')}</p></section>
     <section class="card"><h2 class="h3">${L('fuFacts')}</h2><ul class="checks">${FACTS.map(p => `<li>${T2(p)}</li>`).join('')}</ul>
-      <p class="muted" style="margin:8px 0 0"><a href="${SRC}" target="_blank" rel="noopener">${L('fuSrc')} ↗</a></p></section>
+      <p class="muted" style="margin:8px 0 0"><a href="${SRC}" target="_blank" rel="noopener">${L('fuSrc')} ${A.ext_()}</a></p></section>
     <div class="warn"><b>${L('fuFormula')}:</b> ${L('fuFormulaTxt')}</div>
     <div class="sec-head" style="margin-top:22px"><h2>${L('fuList')}</h2></div>
     ${byFaculty((f, m, X) => `<article class="ins-row ins-row-fu"><h3><a href="#/m/${f.id}/${m.id}">${tx(m.name)}</a></h3><p>${tx(X.future)}</p></article>`)}

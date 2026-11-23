@@ -28,7 +28,7 @@ Object.assign(A.extUI = A.extUI || {}, {
 const KEY = 'fieldAtlasSkills';
 let have = {}; try { have = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(have)); } catch (e) {} };
-let filter = 'all';
+let filter = 'tech'; /* one type at a time: 23 cards at once was 8 screens */
 
 A.ext.routes.skills = {
   page: 'skills',
@@ -41,21 +41,21 @@ A.ext.routes.skills = {
     <section class="view phero" style="padding:16px 0 10px"><div class="eyebrow">${L('navSkills')}</div><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('skTitle')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('skText')}</p></section>
 
     <div class="sec-head"><h2>${L('skTypes')}</h2></div>
-    <div class="sk-types">${D.types.map(t => `<div class="card sk-type" style="--accent:${t.color}"><span class="sk-ico" aria-hidden="true">${t.icon}</span><h3>${tx(t.name)}</h3><p>${tx(t.what)}</p>${t.note ? `<p class="muted">${tx(t.note)}</p>` : ''}</div>`).join('')}</div>
+    <div class="sk-types">${D.types.map(t => `<div class="card sk-type" style="--accent:${t.color}"><span class="sk-ico" aria-hidden="true">${A.ic(t.icon)}</span><h3>${tx(t.name)}</h3><p>${tx(t.what)}</p>${t.note ? `<p class="muted">${tx(t.note)}</p>` : ''}</div>`).join('')}</div>
     <div class="warn"><b>${L('skTransferT')}</b> ${L('skTransfer')}</div>
 
     <div class="sec-head" style="margin-top:24px"><h2>${L('navSkills')}</h2><p class="muted sk-count" role="status">${esc(u('skCount').replace('{n}', n).replace('{t}', D.skills.length))}</p></div>
     <div class="sk-filter" role="group" aria-label="${L('skFilter')}">
-      <button type="button" class="pill-btn" data-act="skf" data-val="all" aria-pressed="${filter === 'all'}">${L('skAll')}</button>
-      ${D.types.map(t => `<button type="button" class="pill-btn" data-act="skf" data-val="${t.id}" aria-pressed="${filter === t.id}"><span aria-hidden="true">${t.icon}</span> ${tx(t.name)}</button>`).join('')}</div>
+      ${D.types.map(t => `<button type="button" class="pill-btn" data-act="skf" data-val="${t.id}" aria-pressed="${filter === t.id}">${A.ic(t.icon)} ${tx(t.name)} <bdi>(${D.skills.filter(s => s.type === t.id).length})</bdi></button>`).join('')}
+      <button type="button" class="pill-btn" data-act="skf" data-val="all" aria-pressed="${filter === 'all'}">${L('skAll')} <bdi>(${D.skills.length})</bdi></button></div>
     <div class="sk-grid">${list.map(s => { const t = T(s.type); return `<article class="card sk-card${have[s.id] ? ' have' : ''}" style="--accent:${t.color}">
-      <p class="sk-tag"><span aria-hidden="true">${t.icon}</span> ${tx(t.name)}</p><h3>${tx(s.name)}</h3><p class="muted">${tx(s.what)}</p>
+      <p class="sk-tag">${A.ic(t.icon)} ${tx(t.name)}</p><h3>${tx(s.name)}</h3><p class="muted">${tx(s.what)}</p>
       <h4>${L('skGet')}</h4><ul class="sk-list">${s.get.map(x => `<li>${tx(x)}</li>`).join('')}</ul>
       <h4>${L('skUse')}</h4><ul class="sk-list use">${s.use.map(x => `<li>${tx(x)}</li>`).join('')}</ul>
       <label class="sk-have"><input type="checkbox" data-act="skh" data-val="${s.id}"${have[s.id] ? ' checked' : ''}> ${L('skHave')}</label></article>`; }).join('')}</div>
 
     <div class="sec-head" style="margin-top:26px"><div><h2>${L('skActs')}</h2><p class="muted" style="margin:4px 0 0">${L('skActsTxt')}</p></div></div>
-    <div class="sk-acts">${D.activities.map(a => `<div class="card sk-act"><h3><span aria-hidden="true">${a.icon}</span> ${tx(a.name)}</h3><ul class="sk-chips">${a.ids.map(id => byId[id] ? `<li style="--accent:${T(byId[id].type).color}">${tx(byId[id].name)}</li>` : '').join('')}</ul></div>`).join('')}</div>
+    <div class="sk-acts">${D.activities.map(a => `<div class="card sk-act"><h3>${A.ic(a.icon)} ${tx(a.name)}</h3><ul class="sk-chips">${a.ids.map(id => byId[id] ? `<li style="--accent:${T(byId[id].type).color}">${tx(byId[id].name)}</li>` : '').join('')}</ul></div>`).join('')}</div>
 
     <div class="card" style="margin-top:18px"><h3>${L('skShow')}</h3><ul class="checks">${u('skShowList').split('|').map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
   },

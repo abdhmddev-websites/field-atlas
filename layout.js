@@ -57,7 +57,7 @@ function toc(root, page) {
   hs.slice(0, 10).forEach((h, i) => {
     if (!h.id) h.id = 'sec-' + i;
     const b = document.createElement('button'); b.type = 'button'; b.className = 'toc-btn';
-    b.textContent = h.textContent.replace(/^\s*\d+\.\s*/, '').replace(/^[⚠↗]\s*/, '').trim();
+    b.textContent = h.textContent.replace(/^\s*\d+\.\s*/, '').trim();
     b.onclick = () => { h.setAttribute('tabindex', '-1'); h.scrollIntoView({ behavior: document.documentElement.dataset.motion === 'reduce' ? 'auto' : 'smooth', block: 'start' }); h.focus({ preventScroll: true }); };
     nav.appendChild(b);
   });
@@ -65,11 +65,11 @@ function toc(root, page) {
   if (anchor) anchor.insertAdjacentElement('afterend', nav); else root.insertAdjacentElement('afterbegin', nav);
 }
 
-const ICON = { test: '◎', types: '◎', faculties: '⌂', decide: '⚖', roadmap: '➶', prepare: '✓', money: '€', ladder: '▤', uni: '✎', reality: '⚠', future: '↗', stories: '❝', class: '⬡', compare: '⇄', skills: '🧩', teacher: '★' };
+const ICON = { test: 'clipboard-list', types: 'hexagon', faculties: 'school', decide: 'scale', roadmap: 'map', prepare: 'list-checks', money: 'wallet', ladder: 'graduation-cap', uni: 'university', reality: 'triangle-alert', future: 'trending-up', stories: 'quote', class: 'chart-pie', compare: 'arrow-left-right', skills: 'puzzle', teacher: 'presentation', plan: 'clock' };
 A.ext.after.push((page, parts) => {
   const root = document.getElementById('app'); if (!root || page === 'lesson') return;
   const ph = root.querySelector('.phero, .test-intro'); const ic = ICON[(parts || [])[0]];
-  if (ph && ic) ph.setAttribute('data-icon', ic);
+  if (ph && ic) { ph.setAttribute('data-icon', ''); if (ph.matches('.phero') && !ph.querySelector('.pmark')) ph.insertAdjacentHTML('beforeend', `<span class="pmark" aria-hidden="true">${A.ic(ic)}</span>`); }
   splitLong(root);
   toc(root, page);
 });
