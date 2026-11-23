@@ -8,6 +8,7 @@ A.ext = A.ext || { routes: {}, after: [] };
 const H = () => A.h;
 Object.assign(A.extUI = A.extUI || {}, {
   navTeacher: ['For the teacher', 'للأستاذ'],
+  tabReal: ['Reality check', 'من أرض الواقع'], tabFuture: ['Future-ready major', 'اختصاصك والمستقبل'],
   tTitle: ['For the teacher', 'للأستاذ'],
   tText: ['Tools to run the lesson. Students do not need these pages.', 'أدوات لإدارة الحصة. الطلاب لا يحتاجون هذه الصفحات.'],
   morePages: ['All pages', 'كل الصفحات'],
@@ -22,7 +23,7 @@ Object.assign(A.extUI = A.extUI || {}, {
 /* groups: [step index or 'teacher', [ [href, label key, route keys, icon] ... ] ] */
 const GROUPS = [
   { step: 0, items: [['#/test', 'navTest', ['test'], '◎'], ['#/types', 'typesTitle', ['types'], '⬡']] },
-  { step: 1, items: [['#/faculties', 'navFac', ['faculties', 'f', 'm'], '⌂'], ['#/reality', 'rcPage', ['reality'], '⚠'], ['#/future', 'fuPage', ['future'], '↗'], ['#/compare/science/engineering', 'openCompare', ['compare'], '⇄']] },
+  { step: 1, items: [['#/faculties', 'navFac', ['faculties', 'f', 'm'], '⌂'], ['#/reality', 'tabReal', ['reality'], '⚠'], ['#/future', 'tabFuture', ['future'], '↗'], ['#/compare/science/engineering', 'openCompare', ['compare'], '⇄']] },
   { step: 4, items: [['#/prepare', 'navPrep', ['prepare'], '✓'], ['#/skills', 'navSkills', ['skills'], '🧩'], ['#/money', 'moneyTitle', ['money'], '€']] },
   { step: 'teacher', items: [['#/teacher', 'tTitle', ['teacher'], '★'], ['#/lesson/1', 'navLesson', ['lesson'], '▶'], ['#/plan', 'planTitle', ['plan'], '⏱'], ['#/worksheet', 'footWs', ['worksheet'], '🖨'], ['#/class', 'classTitle', ['class'], '⬢']] }
 ];
@@ -36,9 +37,10 @@ function subNav(parts) {
   const { u, esc } = H();
   const nav = document.createElement('nav'); nav.id = 'subNav'; nav.className = 'subnav'; nav.setAttribute('aria-label', u('subNav'));
   nav.innerHTML = g.items.map(([h, k, keys, ic]) => { const on = keys.includes(key); return `<a href="${h}" class="subtab${on ? ' on' : ''}"${on ? ' aria-current="page"' : ''}><span aria-hidden="true">${ic}</span> ${esc(u(k))}</a>`; }).join('');
-  const app = document.getElementById('app'), after = app.querySelector('.gbar');
+  const app = document.getElementById('app'), after = app.querySelector('.gbar, .gshow');
   if (after) after.insertAdjacentElement('afterend', nav); else app.insertAdjacentElement('afterbegin', nav);
 }
+A.placeSubNav = subNav;
 A.ext.after.push((page, parts) => subNav(parts || []));
 
 /* teacher hub */

@@ -49,7 +49,7 @@ const byFaculty = (render) => {
   const { tx } = H();
   return H().faculties.map((f, i) => {
     const list = f.majors.filter(m => (A.insight || {})[m.id]); if (!list.length) return '';
-    return `<details class="card ins-fac"${i === 0 ? ' open' : ''}><summary><span aria-hidden="true">${f.icon}</span> ${tx(f.name)} <small class="muted">(${list.length})</small></summary>${list.map(m => render(f, m, A.insight[m.id])).join('')}</details>`;
+    return `<details class="card ins-fac"${i === 0 ? ' open' : ''}><summary><h2 class="ins-h"><span aria-hidden="true">${f.icon}</span> ${tx(f.name)}</h2> <small class="muted">(${list.length})</small></summary>${list.map(m => render(f, m, A.insight[m.id])).join('')}</details>`;
   }).join('');
 };
 

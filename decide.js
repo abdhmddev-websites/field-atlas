@@ -131,9 +131,9 @@ A.ext.after.push((page, parts) => {
   if (parts[0] === 'test' && parts[1] !== 'result') return;
   const h = H(), { u, esc, tx } = h, c = load().c; if (!c.length) return;
   const names = c.map(k => { const [fid, mid] = k.split('/'), f = h.fac(fid), m = f && h.maj(f, mid); return m ? `<li>${f.icon} ${tx(m.name)}</li>` : ''; }).join('');
-  const bar = `<aside class="dbar" id="dBar" aria-label="${esc(u('dList'))}"><b>${esc(u('dList'))} <bdi>(${c.length}/5)</bdi></b><ul>${names}</ul>
+  const bar = `<aside class="dbar${parts[0] === 'test' ? '' : ' dup'}" id="dBar" aria-label="${esc(u('dList'))}"><b>${esc(u('dList'))} <bdi>(${c.length}/5)</bdi></b><ul>${names}</ul>
     ${c.length >= 2 ? `<a class="btn sm" href="#/decide">${esc(u('dGo3'))} ${h.lang === 'ar' ? '←' : '→'}</a>` : `<span class="muted">${esc(u('dNeed2'))}</span>`}</aside>`;
-  const g = document.querySelector('#app .gbar'); if (g) g.insertAdjacentHTML('afterend', bar); else document.getElementById('app').insertAdjacentHTML('afterbegin', bar);
+  const g = document.querySelector('#app .gbar, #app .gshow'); if (g) g.insertAdjacentHTML('afterend', bar); else document.getElementById('app').insertAdjacentHTML('afterbegin', bar);
 });
 
 A.ext.routes.decide = {
@@ -148,7 +148,7 @@ A.ext.routes.decide = {
     const pressure = pc('parents') + pc('friends'), fname = f => L(F.find(x => x[0] === f)[1]);
     const why = x => {
       const up = [...x.parts].sort((a, b) => b.v * b.w - a.v * a.w)[0], down = [...x.parts].sort((a, b) => a.v - b.v || b.w - a.w)[0];
-      return `<small class="d-why">${up && up.v >= 4 ? `<span>▲ ${L('dWhyUp')}: ${fname(up.f)} (${up.v}/5)</span>` : ''}${down && down.v <= 2 ? `<span>▼ ${L('dWhyDown')}: ${fname(down.f)} (${down.v}/5)</span>` : ''}${x.missing.length ? `<span class="muted">${x.missing.map(fname).join('، ')}: ${L('dMissing')}</span>` : ''}</small>`;
+      return `<small class="d-why">${up && up.v >= 4 ? `<span>▲ ${L('dWhyUp')}: ${fname(up.f)} (${up.v}/5)</span>` : ''}${down && down.v <= 2 ? `<span>▼ ${L('dWhyDown')}: ${fname(down.f)} (${down.v}/5)</span>` : ''}${x.missing.length ? `<span class="muted">${x.missing.map(fname).join(h.lang === 'ar' ? '، ' : ', ')}: ${L('dMissing')}</span>` : ''}</small>`;
     };
     return `<div id="decideRoot"><div class="crumbs"><a href="#/">${L('navHome')}</a><span>${L('dTitle')}</span></div>
     <section class="view phero" style="padding:16px 0 10px"><div class="eyebrow">${L('navDecide')}</div><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${L('dTitle')}</h1><p class="muted" style="max-width:780px;font-size:16px;margin:0">${L('dText')}</p></section>
@@ -163,7 +163,7 @@ A.ext.routes.decide = {
       ${pressure > 40 ? `<p class="warn" role="note">${esc(u(pc('parents') && pc('friends') ? 'dPressure' : pc('parents') ? 'dPressP' : 'dPressF').replace('{n}', pressure))}</p>` : ''}${pc('me') < 15 ? `<p class="warn" role="note">${L('dLowMe')}</p>` : ''}</section>
 
     ${st.c.length ? `<section class="card d-sec"><h2 class="h3">${L('d3')}</h2><p class="muted">${L('d3t')}</p>
-      <div class="d-grid-wrap"><table class="uni-table d-grid"><thead><tr><th scope="col"></th>${st.c.map(k => `<th scope="col">${name(k)}</th>`).join('')}</tr></thead><tbody>
+      <div class="d-grid-wrap" role="region" tabindex="0" aria-label="${L('d3')}"><table class="uni-table d-grid"><thead><tr><th scope="col"><span class="sr">${L('dTitle')}</span></th>${st.c.map(k => `<th scope="col">${name(k)}</th>`).join('')}</tr></thead><tbody>
       ${F.map(([f, key]) => `<tr><th scope="row">${L(key)} <small class="muted"><bdi>${pc(f)}%</bdi></small></th>${st.c.map(k => {
         const [fid, mid] = k.split('/'), auto = f === 'test' ? testRate(fid, mid) : 0, v = auto || (st.r[k] || {})[f] || 0;
         return `<td>${auto ? `<b>${auto}</b> <small class="muted">${L('dAuto')}</small>` : `<select data-act="r" data-val="${esc(k)}|${f}" aria-label="${L(key)} — ${esc(h.T((h.maj(h.fac(fid), mid) || {}).name || k))}"><option value="0">–</option>${[1, 2, 3, 4, 5].map(n => `<option value="${n}"${v === n ? ' selected' : ''}>${n}</option>`).join('')}</select>`}</td>`;

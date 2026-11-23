@@ -3,7 +3,7 @@
  * (stale-while-revalidate); page navigations fall back to the cached index when offline.
  * Fonts from Google are cached at runtime. POST requests (report / story forms) are never touched.
  */
-const CACHE = 'field-atlas-v9';
+const CACHE = 'field-atlas-v10';
 const CORE = ['./', './index.html', './icon.svg', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {

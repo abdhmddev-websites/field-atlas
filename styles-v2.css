@@ -296,7 +296,7 @@ body.presenting .ladder-strip.big b{font-size:clamp(18px,1.6vw,34px)}
 body.presenting .ladder-strip.big small{font-size:clamp(14px,1.1vw,24px)}
 body.presenting .ctry-mini h3{font-size:clamp(16px,1.3vw,28px)}
 body.presenting .ctry-mini ol{font-size:clamp(14px,1.1vw,24px)}
-body.presenting .mini h3{font-size:clamp(20px,1.8vw,38px)}
+body.presenting .mini h2{font-size:clamp(20px,1.8vw,38px)}
 body.presenting .mini small{font-size:clamp(13px,1vw,22px)}
 body.presenting .mini b{font-size:clamp(16px,1.35vw,30px)}
 body.presenting .mini li::before{width:clamp(30px,2.2vw,48px);height:clamp(30px,2.2vw,48px);font-size:clamp(13px,1vw,22px)}
@@ -334,7 +334,7 @@ html{scroll-padding-top:120px}
 .lp-btns button[lang=ar],.lp-btns button[lang=en]{background:var(--forest)}
 :root[dir=rtl] .lang-card p,.lang-card p{font-size:15px}
 /* Arabic floor, round 3 */
-:root[dir=rtl] .motion-btn span,:root[dir=rtl] .cmp-vs,:root[dir=rtl] .warn,:root[dir=rtl] .rcard,:root[dir=rtl] .rcard small,:root[dir=rtl] .ws-box p,:root[dir=rtl] .ws-box h3,:root[dir=rtl] .mini small,:root[dir=rtl] .res-acts a{font-size:15px}
+:root[dir=rtl] .motion-btn span,:root[dir=rtl] .cmp-vs,:root[dir=rtl] .warn,:root[dir=rtl] .rcard,:root[dir=rtl] .rcard small,:root[dir=rtl] .ws-box p,:root[dir=rtl] .ws-box h2,:root[dir=rtl] .mini small,:root[dir=rtl] .res-acts a{font-size:15px}
 :root[dir=rtl] q{quotes:'«' '»'}
 h2.h3{font-size:16px;margin:0 0 8px}
 /* test: unanswered says so in words, not only colour */
@@ -472,7 +472,7 @@ dialog.mini-dialog h2{font-size:20px;margin-bottom:6px}
 .gpa-scale b{font:800 16px var(--display);color:var(--forest)}
 .gpa-formula{font-weight:700;margin:0 0 8px}
 .gpa-calc{margin-top:14px}
-.gpa-calc select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--white);min-width:64px}
+.gpa-calc select{font:inherit;padding:6px 8px;border:1.5px solid var(--edge);border-radius:8px;background:var(--white);min-width:64px}
 .gpa-calc td{white-space:normal}
 .gpa-out{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
 .gpa-out p{margin:0;display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
@@ -515,7 +515,7 @@ dialog.mini-dialog h2{font-size:20px;margin-bottom:6px}
 .d-chosen{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .d-chosen li{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--soft);font-weight:600}
 :root[dir=rtl] .d-chosen li{padding:6px 12px 6px 6px}
-#dAdd,.d-grid select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--white);max-width:100%}
+#dAdd,.d-grid select{font:inherit;padding:8px 10px;border:1.5px solid var(--edge);border-radius:10px;background:var(--white);max-width:100%}
 .d-weights{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 24px;margin-bottom:12px}
 .d-w{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px}
 .d-w label{grid-column:1/-1;font-weight:600}
@@ -644,3 +644,76 @@ dialog.mini-dialog h2{font-size:20px;margin-bottom:6px}
 .hp-card a{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;font-weight:600;color:var(--forest);text-decoration:none;background:var(--soft)}
 .hp-card a:hover{background:var(--forest);color:var(--lime)}
 .foot-links{display:none}
+
+
+/* ================= ui-audit round (v36) ================= */
+/* skip link: first Tab stop, shown only on focus */
+.skip{position:absolute;inset-inline-start:16px;top:-80px;z-index:50;padding:12px 18px;border-radius:0 0 12px 12px;background:var(--forest);color:var(--lime);font-weight:700}
+.skip:focus{top:0}
+main:focus{outline:none}
+/* locked states stay readable (quiet by colour, never by fading the text) */
+.gtodo{color:var(--ink);border-color:var(--edge)}
+.nav a.locked{opacity:1;color:var(--muted)}
+.rstep.locked{opacity:1;background:var(--soft);box-shadow:none}
+.rnode.empty i{color:#ffffffcc}.rnode.empty b{color:#ffffffb8}
+.cmp-q{color:color-mix(in srgb,var(--accent) 65%,#000)}
+/* the header switch stops page-level smooth scrolling too */
+html[data-motion=reduce]{scroll-behavior:auto!important}
+/* form controls: edges at 3:1, comfortable height */
+:root select,:root textarea,:root input[type=text],:root input[type=search]{border:1.5px solid var(--edge);border-radius:10px}
+:root select{min-height:40px}
+.d-w input[type=range]{height:28px}
+:focus-visible{border-radius:6px}
+.btn:focus-visible,.subtab:focus-visible,.card:focus-visible,select:focus-visible,input:focus-visible{border-radius:11px}
+.res-hero :focus-visible{outline-color:var(--lime)}
+.d-grid-wrap:focus-visible,.uni-table-wrap:focus-visible{outline:3px solid var(--forest);outline-offset:2px}
+/* targets */
+.brand{min-height:44px}
+.btn.sm,.toc-btn,.pill-btn,.lang{min-height:40px}
+.btn.sm{justify-content:center}
+.go-link,.linkbtn,.mcard .go{display:inline-flex;align-items:center;min-height:32px}
+.ins-row h3 a,.hp-card a{display:inline-flex;align-items:center;min-height:32px}
+.hp-card a{display:flex;min-height:40px}
+summary{min-height:32px}
+@media (pointer:coarse){.btn,.btn.sm,.subtab,.toc-btn,.pill-btn,.choice,.lang,.nav a,select,summary{min-height:44px}.toc-btn,.pill-btn,.choice,.nav a{display:inline-flex;align-items:center}}
+/* headings that replaced h3 keep their look */
+.fcard h2.h3,.step h2.h3{font-size:18px;margin:0}
+.ins-h{display:inline;font:inherit;color:inherit}
+/* Arabic: 15 px floor, no letter-spacing */
+:root[dir=rtl] .btn.sm,:root[dir=rtl] .sk-tag,:root[dir=rtl] .sk-chips li,:root[dir=rtl] .d-why,:root[dir=rtl] .rcard .sub,:root[dir=rtl] .rcode,:root[dir=rtl] .rstamp,
+:root[dir=rtl] .ins-card small,:root[dir=rtl] .ins-row small,:root[dir=rtl] .phero small,:root[dir=rtl] .muted small,:root[dir=rtl] .tech-route small,:root[dir=rtl] .how{font-size:15px}
+:root[dir=rtl] .muted[style*="font-size:13px"]{font-size:15px!important}
+:root[dir=rtl] .rcard .logo,:root[dir=rtl] .ws-head .logo{font-size:15px;letter-spacing:0}
+:root[dir=rtl] .rcode,:root[dir=rtl] h1{letter-spacing:0}
+:root[dir=rtl] .rthink b{font-size:15px}
+:root[dir=rtl] .ws-table td,:root[dir=rtl] .ws-table th{font-size:14px}
+:root[dir=rtl] .ws-foot,:root[dir=rtl] .t-stamp{font-size:12px}
+:root[dir=rtl] .ladder-strip small{line-height:1.6}
+:root[lang=en] #langBtn{font-size:15px}
+/* step bar: one calm row that scrolls with the page (it used to slide under the header) */
+.gbar{position:static;grid-template-columns:1fr auto;align-items:center;gap:10px 16px;margin:14px 0 10px}
+.gbar .gsteps{grid-column:1/-1}
+.gshow{margin:14px 0 10px}
+.gbar + .subnav,.gshow + .subnav{margin-top:0}
+@media (max-width:820px){.gbar{grid-template-columns:1fr}}
+/* phones: everything still visible, in far less height */
+@media (max-width:640px){
+  .nav{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;overflow:visible}
+  .nav a,:root[dir=rtl] .nav a{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding:6px 2px;white-space:normal;text-align:center;font-size:13px;line-height:1.25;min-height:58px}
+  :root[dir=rtl] .nav a{font-size:14px}
+  .nav .nnum{margin:0}
+  .nav .nav-present{border:0;margin:0}
+  .gbar{padding:10px 12px;gap:8px}
+  .gbar p{font-size:14px;line-height:1.5}
+  .gbtns{gap:6px}
+  .gbar .btn{padding:8px 10px}
+  .subnav{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+  .subtab{padding:8px 10px;font-size:14px;line-height:1.35}
+  .dbar{padding:8px 10px;gap:6px 8px}
+  .dbar li{padding:2px 8px}
+  .subtab:last-child:nth-child(odd){grid-column:1/-1}
+  .gx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .gbar ~ .dbar.dup .btn{display:none} /* same place as the step bar's Next button */
+  .crumbs{padding-top:8px}
+}
+.crumbs{align-items:center}

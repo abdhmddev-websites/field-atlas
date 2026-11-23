@@ -25,7 +25,7 @@ A.extUI = {
   g1: S('Take the personality test and read your types', 'قم باختبار الشخصية واقرأ أنماطك'), g2: S('Explore the faculties and majors that interest you', 'استكشف الكليات والاختصاصات التي تهمّك'),
   g3: S('Build your roadmap: bachelor → master → PhD → career, with a Plan B', 'ابنِ طريقك: إجازة ← ماستر ← دكتوراه ← مهنة، مع خطة بديلة'), g4: S('See what to prepare this year', 'اعرف ما تحضّره هذه السنة'),
   g5: S('Read more: the degree ladder', 'للمزيد: سلّم الشهادات'), g6: S('Read more: how university works', 'للمزيد: كيف تعمل الجامعة'),
-  gStep: S('Step {n} of 7', 'الخطوة {n} من 7'), gNext: S('Next', 'التالي'), gBack: S('Back', 'السابق'), gExit: S('Hide the steps', 'أخفِ الخطوات'), gDone: S('Path complete — well done!', 'أنهيت المسار — أحسنت!'),
+  gStep: S('Step {n} of 7', 'الخطوة {n} من 7'), gNext: S('Next', 'التالي'), gBack: S('Back', 'السابق'), gShow: S('Show the steps', 'إظهار الخطوات'), gExit: S('Hide the steps', 'إخفاء الخطوات'), gDone: S('Path complete — well done!', 'أنهيت المسار — أحسنت!'),
   navUni: S('University system', 'نظام الجامعة'), navHome: S('Home', 'الرئيسية'),
   classTitle: S('Class interest map', 'خريطة ميول الصف'),
   classText: S('After the test, ask students to raise their hand for the first letter of their code and type the counts. The map shows the class profile on the projector. Nothing is saved or sent.', 'بعد الاختبار، اطلب من الطلاب رفع اليد بحسب الحرف الأول من رمزهم واكتب الأعداد. تُظهر الخريطة ملف الصف على الشاشة. لا يُحفظ شيء ولا يُرسَل.'),
@@ -38,7 +38,7 @@ A.extUI = {
   parentOpen: S('Open the full roadmap', 'افتح الطريق كاملًا'), parentNone: S('This link does not contain a plan. Ask your child to copy the parent link again from "My roadmap".', 'هذا الرابط لا يحتوي على خطة. اطلبوا من ولدكم نسخ رابط الأهل مجددًا من «طريقي».'),
   storiesTitle: S('Stories from former students', 'قصص من طلاب سابقين'),
   storiesText: S('Former students tell what they studied, where, and what they would tell their Grade 10 self. Stories appear here only after the teacher has checked them and the student agreed.', 'طلاب سابقون يخبرون ماذا درسوا وأين، وماذا كانوا ليقولوا لأنفسهم في الأول ثانوي. تظهر القصص هنا فقط بعد أن يراجعها الأستاذ ويوافق الطالب.'),
-  storiesEmpty: S('No stories yet. Are you a former student? Share yours below.', 'لا قصص بعد. هل أنت طالب سابق؟ شارك قصتك أدناه.'),
+  storiesEmpty: S('No stories yet. Are you a former student? Tell the teacher your story, and it can be added here.', 'لا قصص بعد. هل أنت طالب سابق؟ أخبر الأستاذ بقصتك لتُضاف هنا.'),
   storyForm: S('Share your story (former students)', 'شارك قصتك (للطلاب السابقين)'),
   sName: S('First name (as you want it shown)', 'الاسم الأول (كما تريده أن يظهر)'), sYear: S('Year you graduated from school', 'سنة تخرّجك من المدرسة'),
   sStudied: S('What did you study?', 'ماذا درست؟'), sWhere: S('Where (university, country)?', 'أين (الجامعة، البلد)؟'),
@@ -67,53 +67,28 @@ function injectStrip() {
   if (anchor) anchor.insertAdjacentHTML('afterend', html); else { const app = $('app'); if (app) app.insertAdjacentHTML('afterbegin', html); }
 }
 
-/* ---------- report a mistake (Netlify Forms, no personal data) ---------- */
-const enc = o => Object.keys(o).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(o[k])).join('&');
-function postForm(data) {
-  return fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: enc(data) }).then(r => { if (!r.ok) throw new Error(r.status); });
-}
-function openReport() {
-  const { u, esc } = H();
-  const d = document.createElement('dialog'); d.className = 'mini-dialog'; d.setAttribute('aria-labelledby', 'rpT');
-  d.innerHTML = `<form method="dialog" id="rpForm"><h2 id="rpT">${esc(u('reportTitle'))}</h2><p class="muted">${esc(u('reportText'))}</p>
-    <label class="fld"><span>${esc(u('reportField'))}</span><textarea id="rpMsg" rows="5" maxlength="1500"></textarea></label>
-    <p class="muted" id="rpState" role="status"></p>
-    <div class="cta"><button type="submit" class="btn" id="rpSend">${esc(u('send'))}</button><button type="button" class="btn ghost" id="rpCancel">${esc(u('cancel'))}</button></div></form>`;
-  document.body.appendChild(d);
-  const close = () => { d.close(); d.remove(); const b = $('reportBtn'); if (b) b.focus(); };
-  d.querySelector('#rpCancel').onclick = close;
-  d.addEventListener('cancel', e => { e.preventDefault(); close(); });
-  d.querySelector('#rpForm').onsubmit = e => {
-    e.preventDefault();
-    const msg = d.querySelector('#rpMsg').value.trim(), stt = d.querySelector('#rpState');
-    if (!msg) { stt.textContent = u('reportEmpty'); return; }
-    d.querySelector('#rpSend').disabled = true;
-    postForm({ 'form-name': 'report', page: location.hash || '#/', lang: H().lang, message: msg, 'bot-field': '' })
-      .then(() => { stt.textContent = u('reportSent'); setTimeout(close, 1800); })
-      .catch(() => { stt.textContent = u('reportFail'); d.querySelector('#rpSend').disabled = false; });
-  };
-  if (d.showModal) d.showModal(); else d.setAttribute('open', '');
-  d.querySelector('#rpMsg').focus();
-}
-
 /* ---------- guided student path ---------- */
 /* The lesson path (PATH lives in app.js and also drives the numbered top menu). The bar is on by default. */
 const gOn = () => { try { return localStorage.getItem('fieldAtlasGuide') !== 'off'; } catch (e) { return true; } };
 const gSet = v => { try { v ? localStorage.removeItem('fieldAtlasGuide') : localStorage.setItem('fieldAtlasGuide', 'off'); } catch (e) {} };
 A.gSet = gSet;
 function guideBar(parts) {
-  const old = document.querySelector('.gbar'); if (old) old.remove();
-  if (!gOn()) return;
+  const old = document.querySelector('.gbar, .gshow'); if (old) old.remove();
   if (parts[0] === 'test' && parts[1] === 'q') return; // keep the questions page calm
   const P = H().PATH, i = P.findIndex(s => s.k.includes(parts[0] || '-'));
   if (i < 0) return;
+  if (!gOn()) { /* hidden by the student: always leave a way back */
+    $('app').insertAdjacentHTML('afterbegin', `<button type="button" class="btn ghost sm gshow" id="gShow">${H().esc(H().u('gShow'))}</button>`);
+    $('gShow').onclick = () => { gSet(true); guideBar(parts); if (A.placeSubNav) A.placeSubNav(parts); $('gExit').focus(); };
+    return;
+  }
   const { u, esc, lang } = H(), arrowF = lang === 'ar' ? '←' : '→', arrowB = lang === 'ar' ? '→' : '←';
   const next = P[i + 1], prev = P[i - 1];
   const html = `<nav class="gbar" aria-label="${esc(u('startTitle'))}"><div class="gsteps" aria-hidden="true">${P.map((s, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>
     <p><b>${esc(u('gStep').replace('{n}', i + 1))}:</b> ${esc(u(P[i].d))}</p>
-    <div class="gbtns">${prev ? `<a class="btn ghost" href="${prev.h}">${arrowB} ${esc(u('gBack'))}</a>` : ''}${next ? (A.stepDone && i < 4 && !A.stepDone(i) ? `<span class="gtodo">🔒 ${esc(u('gTodo'))}: ${esc(u('need' + i))}</span>` : `<a class="btn" href="${next.h}">${esc(u('gNext'))}: ${esc(u(next.n))} ${arrowF}</a>`) : `<span class="gdone">${esc(u('gDone'))}</span>`}<button type="button" class="btn ghost" id="gExit">${esc(u('gExit'))}</button></div></nav>`;
+    <div class="gbtns">${prev ? `<a class="btn ghost" href="${prev.h}">${arrowB} ${esc(u('gBack'))}</a>` : ''}${next ? (A.stepDone && i < 4 && !A.stepDone(i) ? `<span class="gtodo">🔒 ${esc(u('gTodo'))}: ${esc(u('need' + i))}</span>` : `<a class="btn" href="${next.h}">${esc(u('gNext'))}: ${esc(u(next.n))} ${arrowF}</a>`) : `<span class="gdone">${esc(u('gDone'))}</span>`}<button type="button" class="btn ghost" id="gExit">${esc(u('gExit')).replace(/ (.+)$/, '<span class="gx"> $1</span>')}</button></div></nav>`;
   const app = $('app'); app.insertAdjacentHTML('afterbegin', html);
-  $('gExit').onclick = () => { gSet(false); guideBar(parts); };
+  $('gExit').onclick = () => { gSet(false); guideBar(parts); if (A.placeSubNav) A.placeSubNav(parts); $('gShow').focus(); };
 }
 /* old "Start here" links now open the home page, which shows the path */
 A.ext.routes.start = { page: 'home', view() { return ''; }, bind() { gSet(true); location.replace('#/'); } };
@@ -144,7 +119,7 @@ A.ext.routes.uni = {
     <section class="view phero" style="padding:16px 0 10px"><div class="eyebrow">${esc(u('navUni'))}</div><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${tx(U.title)}</h1><p class="muted" style="max-width:760px;font-size:16px;margin:0">${tx(U.intro)}</p></section>
     <h2 class="uni-h">${tx(U.creditTitle)}</h2>${two(U.credit)}
     <h2 class="uni-h">${tx(U.degTitle)}</h2>
-    <div class="card uni-table-wrap"><table class="uni-table"><thead><tr>${U.degHead.map(h => `<th scope="col">${tx(h)}</th>`).join('')}</tr></thead>
+    <div class="card uni-table-wrap" role="region" tabindex="0" aria-label="${tx(U.degTitle)}"><table class="uni-table"><thead><tr>${U.degHead.map(h => `<th scope="col">${tx(h)}</th>`).join('')}</tr></thead>
       <tbody>${U.deg.map(r => `<tr><th scope="row">${tx(r.d)}${r.how ? `<small class="muted how">${tx(r.how)}</small>` : ''}</th><td>${cell(r.sem)}</td><td>${cell(r.n)}</td><td class="tot">${cell(r.tot)}</td><td>${cell(r.y)}</td></tr>`).join('')}</tbody></table></div>
     <div class="warn"><b>${tx(U.unitsTitle)}</b> ${tx(U.units)}</div>
     <div class="card"><h3>${tx(U.loadTitle)}</h3>${list(U.load)}</div>
@@ -245,23 +220,8 @@ A.ext.routes.stories = {
   page: 'stories',
   view() {
     const { u, esc, lang } = H(), list = (A.stories || []);
-    const field = (id, key, type = 'text') => `<label class="fld"><span>${esc(u(key))}</span>${type === 'area' ? `<textarea id="${id}" rows="4" maxlength="1500"></textarea>` : `<input id="${id}" type="text" maxlength="120">`}</label>`;
     return `<section class="view phero" style="padding:16px 0 10px"><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${esc(u('storiesTitle'))}</h1><p class="muted" style="max-width:720px;font-size:16px;margin:0">${esc(u('storiesText'))}</p></section>
-      ${list.length ? `<div class="types3">${list.map(s => `<article class="card story"><b>${esc(s.name)}</b> <small class="muted">${esc(s.year)}</small><p class="muted">${esc(s.studied)} · ${esc(s.where)}</p><blockquote>${esc(lang === 'ar' ? (s.adviceAr || s.advice) : s.advice)}</blockquote></article>`).join('')}</div>` : `<div class="warn">${esc(u('storiesEmpty'))}</div>`}
-      <form class="card story-form" id="stForm" novalidate><h2 class="h3">${esc(u('storyForm'))}</h2>
-        ${field('stName', 'sName')}${field('stYear', 'sYear')}${field('stStudied', 'sStudied')}${field('stWhere', 'sWhere')}${field('stAdvice', 'sAdvice', 'area')}
-        <label class="consent"><input type="checkbox" id="stConsent"> <span>${esc(u('sConsent'))}</span></label>
-        <p class="muted" id="stState" role="status"></p><button type="submit" class="btn">${esc(u('send'))}</button></form>`;
-  },
-  bind() {
-    const { u } = H();
-    $('stForm').onsubmit = e => {
-      e.preventDefault();
-      const v = id => $(id).value.trim(), st = $('stState');
-      const data = { 'form-name': 'story', name: v('stName'), year: v('stYear'), studied: v('stStudied'), where: v('stWhere'), advice: v('stAdvice'), consent: $('stConsent').checked ? 'yes' : '', 'bot-field': '' };
-      if (!data.name || !data.year || !data.studied || !data.where || !data.advice || !data.consent) { st.textContent = u('sNeed'); return; }
-      postForm(data).then(() => { st.textContent = u('sSent'); $('stForm').reset(); }).catch(() => { st.textContent = u('reportFail'); });
-    };
+      ${list.length ? `<div class="types3">${list.map(s => `<article class="card story"><b>${esc(s.name)}</b> <small class="muted">${esc(s.year)}</small><p class="muted">${esc(s.studied)} · ${esc(s.where)}</p><blockquote>${esc(lang === 'ar' ? (s.adviceAr || s.advice) : s.advice)}</blockquote></article>`).join('')}</div>` : `<div class="warn">${esc(u('storiesEmpty'))}</div>`}`;
   }
 };
 

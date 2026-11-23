@@ -10,6 +10,9 @@ const AR_DIG = /[٠-٩]/g, RANGE = /(\d+(?:[.,]\d+)*)\s*([–-])\s*(\d+(?:[.,]\d
 /* Arabic UI: one digit system (Western, as used in Lebanese schools) and number ranges isolated so "3–4" never reads "4–3" */
 const fixAr = s => lang !== 'ar' ? s : String(s).replace(AR_DIG, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/٬/g, ',').replace(RANGE, '\u2066$1$2$3\u2069');
 const T = o => fixAr((o && (o[lang] || o.en)) || '');
+const MONTHS = ['January|كانون الثاني', 'February|شباط', 'March|آذار', 'April|نيسان', 'May|أيار', 'June|حزيران', 'July|تموز', 'August|آب', 'September|أيلول', 'October|تشرين الأول', 'November|تشرين الثاني', 'December|كانون الأول'];
+/* "2026-11" -> "November 2026" (a raw 2026-11 reads backwards inside Arabic text) */
+const monthOf = s => { const [y, m] = String(s).split('-'); return MONTHS[m - 1] ? MONTHS[m - 1].split('|')[lang === 'ar' ? 1 : 0] + ' ' + y : s; };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const tx = o => esc(T(o));
 
@@ -171,6 +174,7 @@ const UI = {
   reqT: ['What each faculty usually asks for', 'ماذا تطلب كل كلية عادةً'],
   reqSection: ['Bac section', 'فرع الثانوي'], reqCourses: ['Courses to take', 'مواد تختارها'], reqExtra: ['Also', 'أيضًا'],
   linksT: ['Official pages to check', 'صفحات رسمية للتحقّق'],
+  skip: ['Skip to the content', 'انتقل إلى المحتوى'], navMain: ['Lesson steps', 'خطوات الدرس'],
   checkedNote: ['General guidance written', 'إرشادات عامة كُتبت في'],
   checkedWarn: ['Rules change every year — always check the university\'s official page.', 'الشروط تتغيّر كل سنة — تحقّق دائمًا من الصفحة الرسمية للجامعة.'],
   toGetIn: ['To get in', 'للدخول'], seePrep: ['See the full "Prepare now" guide', 'افتح دليل «استعدّ الآن» كاملًا'],
@@ -236,7 +240,7 @@ const PATH = [
   { k: ['faculties', 'f', 'm', 'compare', 'reality', 'future'], h: '#/faculties', n: 'navFac', d: 'g2' },
   { k: ['decide'], h: '#/decide', n: 'navDecide', d: 'gDecide' },
   { k: ['roadmap'], h: '#/roadmap', n: 'navRoad', d: 'g3' },
-  { k: ['prepare', 'money'], h: '#/prepare', n: 'navPrep', d: 'g4' },
+  { k: ['prepare', 'skills', 'money'], h: '#/prepare', n: 'navPrep', d: 'g4' },
   { k: ['ladder'], h: '#/ladder', n: 'navLadder', d: 'g5' },
   { k: ['uni'], h: '#/uni', n: 'navUni', d: 'g6' }
 ];
@@ -275,7 +279,7 @@ function facultiesView() {
   <section class="view phero" style="padding:16px 0 10px"><h1 style="font-size:clamp(28px,4vw,44px);margin:6px 0 8px">${u('facTitle')}</h1><p class="muted" style="max-width:720px;font-size:16px;margin:0">${u('facPageText')}</p>
     <div class="cta"><a class="btn ghost" href="#/compare/science/engineering">${u('openCompare')}</a></div></section>
   <div class="fgrid">${faculties.map(f => `<a class="fcard" href="#/f/${f.id}" style="${accent(f)}">
-      <span class="ico" aria-hidden="true">${f.icon}</span><h3>${tx(f.name)}</h3><q>${tx(f.question)}</q>
+      <span class="ico" aria-hidden="true">${f.icon}</span><h2 class="h3">${tx(f.name)}</h2><q>${tx(f.question)}</q>
       <span class="meta"><span>${f.majors.length} ${mLabel(f.majors.length)}</span>${f.status === 'full' ? '' : `<span class="soon">${u('soon')}</span>`}</span></a>`).join('')}</div>`;
 }
 
@@ -318,9 +322,9 @@ function majorView(f, m) {
     <div>
       <div class="steps">
         <div class="step"><span class="dot">1</span><div class="card"><h2 class="h3">${esc(SN(m, 'bachelor'))}${SN(m, 'bachelor').includes(b.deg) ? '' : ` <small>${esc(b.deg)}</small>`}</h2><p>${esc(STX(m, 'bachelor'))}</p>
-          <div class="pills"><span class="pill">${u('usLabel')}: ${esc(b.deg)} · ${esc(fixAr(b.years))} ${u('years')}</span><span class="pill">${u('lmdLabel')}: ${esc(b.lmd)}</span></div></div></div>
+          <div class="pills"><span class="pill">${u('usLabel')}: ${esc(b.deg)} · ${esc(fixAr(b.years))} ${u('years')}</span><span class="pill">${u('lmdLabel')}: ${esc(fixAr(b.lmd))}</span></div></div></div>
         <div class="step"><span class="dot">2</span><div class="card"><h2 class="h3">${esc(SN(m, 'master'))} <small>${stg(m, 'master') ? esc(fixAr(SY(m, 'master', ''))) + (SY(m, 'master', '') ? ' ' + u('years') : '') : 'MS / MEng / MA'}</small></h2><p>${esc(STX(m, 'master'))}</p>${chips(m.masters)}</div></div>
-        <div class="step"><span class="dot">3</span><div class="card"><h2 class="h3">${esc(SN(m, 'phd'))}</h2><p>${esc(STX(m, 'phd'))}</p>${chips(m.phd)}<p class="muted scopus">${u('research')}: <span dir="ltr">${esc(m.scopus)}</span></p></div></div>
+        <div class="step"><span class="dot">3</span><div class="card"><h2 class="h3">${esc(SN(m, 'phd'))}</h2><p>${esc(STX(m, 'phd'))}</p>${chips(m.phd)}<p class="muted scopus">${u('research')}: <span dir="ltr" lang="en">${esc(m.scopus)}</span></p></div></div>
         <div class="step"><span class="dot">4</span><div class="card"><h2 class="h3">${u('career')}</h2><p>${u('careerTxt')}</p>${chips(m.careers)}</div></div>
       </div>
       ${m.routes && m.routes.length ? `<div class="card" style="margin-top:16px"><h2 class="h3">${u('routes')}</h2><ul style="margin:0;padding-inline-start:18px">${m.routes.map(r => `<li>${tx(r)}</li>`).join('')}</ul></div>` : ''}
@@ -333,7 +337,7 @@ function majorView(f, m) {
 function ladderView() {
   return `<div class="crumbs"><a href="#/">${u('navHome')}</a><span>${u('ladderPageTitle')}</span></div>
   <section class="view phero" style="padding:18px 0 0"><h1 style="font-size:clamp(28px,4vw,44px)">${u('ladderPageTitle')}</h1><p class="muted" style="font-size:16px;max-width:700px">${u('ladderPageText')}</p></section>
-  <div class="steps" style="margin-top:20px">${ladder.levels.map((l, i) => `<div class="step"><span class="dot" style="background:var(--forest)">${i + 1}</span><div class="card"><h3>${tx(l.name)}</h3><p>${tx(l.what)}</p></div></div>`).join('')}</div>
+  <div class="steps" style="margin-top:20px">${ladder.levels.map((l, i) => `<div class="step"><span class="dot" style="background:var(--forest)">${i + 1}</span><div class="card"><h2 class="h3">${tx(l.name)}</h2><p>${tx(l.what)}</p></div></div>`).join('')}</div>
   <div class="lgrid">${ladder.systems.map(s => `<div class="card"><h3>${tx(s.name)}</h3><p class="muted" style="margin:4px 0 0">${tx(s.where)}</p><ol>${s.steps.map(x => `<li>${tx(x)}</li>`).join('')}</ol></div>`).join('')}</div>
   ${ladder.abbr ? `<section class="card abbr" aria-labelledby="abbrH"><h2 class="h3" id="abbrH">${u('abbrTitle')}</h2><p class="muted" style="margin:4px 0 12px">${u('abbrSub')}</p><dl class="abbr-list">${ladder.abbr.map(a => `<div><dt><bdi dir="ltr">${esc(a.code)}</bdi></dt><dd><b>${tx(a.name)}</b><span>${tx(a.what)}</span></dd></div>`).join('')}</dl></section>` : ''}
   ${techRoute()}
@@ -531,7 +535,7 @@ function prepareView() {
     <small>${k === 'lb' ? `${u('reqSection')}: ${tx(r.lb)}` : `${u('reqCourses')}: ${r.us.map(T).map(esc).join(' · ')}`}</small>
     <small class="muted">${tx(r.extra)}</small></div></a>`; }).join('')}</div>
   <div class="card" style="margin:18px 0"><h3>${u('linksT')}</h3><ul class="links">${P.links.map(l => `<li><a href="${l.url}" target="_blank" rel="noopener">${tx(l.name)} ↗</a></li>`).join('')}</ul>
-    <p class="muted" style="margin:10px 0 0;font-size:13px">${u('checkedNote')} ${P.checked}. ${u('checkedWarn')}</p></div>`;
+    <p class="muted" style="margin:10px 0 0;font-size:13px">${u('checkedNote')} ${monthOf(P.checked)}. ${u('checkedWarn')}</p></div>`;
 }
 function bindTrack() {
   document.querySelectorAll('[data-track]').forEach(b => b.onclick = () => {
@@ -553,10 +557,10 @@ function countryCard(f) {
   return `<div class="card ctry-card"><h3><span class="cc" aria-hidden="true">${c.code}</span> ${u('studyIn')}: ${tx(c.name)}</h3>
     ${note ? `<p>${tx(note)}</p>` : ''}
     <p class="muted"><b>${u('ladderThere')}:</b> ${c.steps.map(T).map(esc).join(lang === 'ar' ? ' ← ' : ' → ')}</p>
-    ${unis.length ? `<p><b>${u('unisLook')}</b> <span class="muted">(${u('unisNote')})</span></p><div class="pills">${unis.map(n => `<span class="pill" dir="ltr">${esc(n)}</span>`).join('')}</div>` : ''}
+    ${unis.length ? `<p><b>${u('unisLook')}</b> <span class="muted">(${u('unisNote')})</span></p><div class="pills">${unis.map(n => n && n.en ? `<span class="pill">${tx(n)}</span>` : `<span class="pill" dir="ltr" lang="en">${esc(n)}</span>`).join('')}</div>` : ''}
     <p class="muted" style="margin-top:10px"><b>${u('howGetIn')}:</b> ${tx(c.entry)}</p>
     <a class="go-link" href="${c.link.url}" target="_blank" rel="noopener">${tx(c.link.name)} ↗</a>
-    <p class="muted checked">${u('checkedNote')} ${C.checked}. ${u('checkedWarn')}</p></div>`;
+    <p class="muted checked">${u('checkedNote')} ${monthOf(C.checked)}. ${u('checkedWarn')}</p></div>`;
 }
 function majorCountryBox(m) {
   if (country === 'lb') return '';
@@ -608,7 +612,7 @@ function hexagon(pct, size = 300) {
     ${[1, .75, .5, .25].map(f => `<polygon points="${ring(f)}" class="hex-ring"/>`).join('')}
     ${PZ.order.map((_, i) => { const [x, y] = pt(i, R); return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" class="hex-ring"/>`; }).join('')}
     ${poly ? `<polygon points="${poly}" class="hex-me"/>` : ''}
-    ${PZ.order.map((k, i) => { const [x, y] = pt(i, R + 22), [nx, ny] = pt(i, R + 50); return `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14" fill="${PZ.types[k].color}"/><text x="${x.toFixed(1)}" y="${(y + 4.5).toFixed(1)}" class="hex-l">${k}</text><text x="${nx.toFixed(1)}" y="${(ny + 5).toFixed(1)}" class="hex-n" text-anchor="${Math.abs(nx - cx) < 8 ? 'middle' : nx > cx ? 'start' : 'end'}">${esc(T(PZ.types[k].name))}</text></g>`; }).join('')}
+    ${PZ.order.map((k, i) => { const [x, y] = pt(i, R + 22), [px, py] = pt(i, R + 50), side = Math.abs(x - cx) > 8, nx = side ? x : px, ny = side ? (y < cy ? y - 26 : y + 28) : py; return `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14" fill="${PZ.types[k].color}"/><text x="${x.toFixed(1)}" y="${(y + 4.5).toFixed(1)}" class="hex-l">${k}</text><text x="${nx.toFixed(1)}" y="${(ny + 5).toFixed(1)}" class="hex-n" text-anchor="middle">${esc(T(PZ.types[k].name))}</text></g>`; }).join('')}
   </svg>`;
 }
 function typeCard(k, open) {
@@ -715,13 +719,13 @@ function moneyView() {
   <div class="sec-head" style="margin-top:24px"><h2>${u('scholT')}</h2></div>
   <div class="schol">${MN.scholarships.map(s => s.url ? `<a class="card schol-row" href="${s.url}" target="_blank" rel="noopener"><b dir="ltr">${esc(s.name)} <span aria-hidden="true">↗</span></b><span class="sr">${u('newTab')}</span><span class="pill">${tx(s.for)}</span><small>${tx(s.who)}</small></a>` : `<div class="card schol-row"><b>${tx(s.label)}</b><span class="pill">${tx(s.for)}</span><small>${tx(s.who)}</small></div>`).join('')}</div>
   <div class="card" style="margin:18px 0"><h3>${u('moneyTips')}</h3><ul class="checks two">${MN.tips.map(x => `<li>${tx(x)}</li>`).join('')}</ul></div>
-  <p class="muted checked">${u('checkedNote')} ${MN.checked}. ${u('moneyWarn')}</p>`;
+  <p class="muted checked">${u('checkedNote')} ${monthOf(MN.checked)}. ${u('moneyWarn')}</p>`;
 }
 
 /* ───────────── printable worksheet (for discussion or students without a laptop) ───────────── */
 function worksheetView() {
   const line = n => `<span class="ws-line"></span>`.repeat(n);
-  const box = (title, n, hint) => `<div class="ws-box"><h3>${title}</h3>${hint ? `<p class="muted">${hint}</p>` : ''}${line(n)}</div>`;
+  const box = (title, n, hint) => `<div class="ws-box"><h2>${title}</h2>${hint ? `<p class="muted">${hint}</p>` : ''}${line(n)}</div>`;
   return `<div class="no-print crumbs"><a href="#/test">${u('navTest')}</a><span>${u('wsTitle')}</span></div>
   <div class="no-print ws-actions"><p class="muted">${u('wsText')}</p><button type="button" class="btn" id="printWs">${u('printWs')}</button></div>
   <article class="ws">
@@ -733,7 +737,7 @@ function worksheetView() {
       ${box('3 · ' + u('wsQ3'), 3, u('wsQ3h'))}
       ${box('4 · ' + u('wsQ4'), 3, u('wsQ4h'))}
     </div>
-    <div class="ws-box"><h3>5 · ${u('wsQ5')}</h3>
+    <div class="ws-box"><h2>5 · ${u('wsQ5')}</h2>
       <table class="ws-table"><tr><th></th><th>${u('wsWhat')}</th><th>${u('wsWhere')}</th></tr>
         ${[u('bachelor'), u('master'), u('phd'), u('career')].map(r => `<tr><td>${r}</td><td></td><td></td></tr>`).join('')}</table></div>
     <div class="ws-grid">
@@ -812,7 +816,7 @@ function miniPath(fid, mid) {
   const f = fac(fid), m = maj(f, mid);
   if (!m) return '';
   const step = (k, val, yrs) => `<li><small>${esc(SN(m, k))}${yrs ? ' · ' + esc(fixAr(yrs)) + ' ' + u('years') : ''}</small><b>${tx(val)}</b></li>`;
-  return `<div class="card mini" style="${accent(f)}"><div class="eyebrow">${f.icon} ${tx(f.name)}</div><h3>${tx(m.name)}</h3>
+  return `<div class="card mini" style="${accent(f)}"><div class="eyebrow">${f.icon} ${tx(f.name)}</div><h2>${tx(m.name)}</h2>
     <ol>${step('bachelor', m.name, m.bachelor.years)}${step('master', m.masters[0], SY(m, 'master', '1–2'))}${step('phd', m.phd[0], SY(m, 'phd', '3–6'))}
     <li><small>${u('career')}</small><b>${tx(m.careers[0])}</b></li></ol></div>`;
 }
@@ -930,7 +934,7 @@ function route(opts = {}) {
   const here = PATH.findIndex(p => p.k.includes(parts[0] || '-'));
   const SD = window.ATLAS.stepState || (() => '');
   $('nav').innerHTML = PATH.map((p, i) => { const s = SD(i); return `<a href="${p.h}" class="${i === here ? 'on' : ''} ${s}"${i === here ? ' aria-current="page"' : ''}><span class="nnum" aria-hidden="true">${s === 'done' ? '✓' : s === 'locked' ? '🔒' : i + 1}</span>${u(p.n)}${s ? `<span class="sr"> (${u(s === 'done' ? 'stDone' : 'stLocked')})</span>` : ''}</a>`; }).join('')
-    + `<a href="#/teacher" class="nav-present${['teacher', 'plan', 'ws', 'class', 'lesson'].includes(page) ? ' on' : ''}"><span aria-hidden="true">★</span> ${u('navTeacher')}</a>`;
+    + `<a href="#/teacher" class="nav-present${['teacher', 'plan', 'ws', 'class', 'lesson'].includes(page) ? ' on' : ''}"${['teacher', 'plan', 'ws', 'class', 'lesson'].includes(page) ? ' aria-current="page"' : ''}><span aria-hidden="true">★</span> ${u('navTeacher')}</a>`;
   document.body.classList.toggle('presenting', page === 'lesson');
   if (page === 'road') bindRoadmap();
   if (page === 'home') { bindSearch(); const mb = $('mqBtn'); mb.onclick = () => { const p = mb.getAttribute('aria-pressed') !== 'true'; mb.setAttribute('aria-pressed', String(p)); document.querySelector('.marquee').classList.toggle('paused', p); }; }
@@ -949,7 +953,8 @@ function route(opts = {}) {
   if (EXT.routes[parts[0]] && EXT.routes[parts[0]].bind) EXT.routes[parts[0]].bind(parts, query);
   EXT.after.forEach(fn => { try { fn(page, parts, !!opts.soft); } catch (e) { console.error(e); } });
   const h1 = document.querySelector('#app h1');
-  document.title = (h1 && page !== 'home' ? h1.textContent.trim() + ' · ' : '') + u('brand');
+  const num = page === 'testq' ? `${testPageN}/${PAGES} · ` : page === 'lesson' ? `${Math.min(SLIDES, Math.max(1, +parts[1] || 1))}/${SLIDES} · ` : page === 'gate' && here >= 0 ? u(PATH[here].n) + ' · ' : '';
+  document.title = (h1 && page !== 'home' ? num + h1.textContent.trim() + ' · ' : '') + u('brand');
   initMotion(!!opts.soft);
 }
 
@@ -997,16 +1002,19 @@ function applyLang() {
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   $('brandName').textContent = u('brand');
+  $('skip').textContent = u('skip'); $('nav').setAttribute('aria-label', u('navMain'));
   $('langBtn').textContent = u('switchLang');
   $('langBtn').setAttribute('lang', lang === 'ar' ? 'en' : 'ar');
   applyMotion();
-  $('foot').innerHTML = `<p>${u('footer')} ${u('checkedNote')} ${C.checked}.</p>`;
+  $('foot').innerHTML = `<p>${u('footer')} ${u('checkedNote')} ${monthOf(C.checked)}.</p>`;
 }
 function setLang(l) {
   lang = l; langChosen = true;
   try { localStorage.setItem('fieldAtlasLocale', lang); } catch (e) {}
   applyLang(); seenRoutes.clear(); route(); const b = $('langBtn'); if (b) b.focus({ preventScroll: true });
 }
+/* the router owns the hash, so the skip link moves focus itself */
+$('skip').onclick = e => { e.preventDefault(); const m = $('app'); m.setAttribute('tabindex', '-1'); m.focus(); m.scrollIntoView({ block: 'start' }); };
 $('langBtn').onclick = () => setLang(lang === 'ar' ? 'en' : 'ar');
 
 /* first visit: let every student pick their language (mixed Arabic / English classes) */
