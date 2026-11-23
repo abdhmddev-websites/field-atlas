@@ -86,7 +86,7 @@ function guideBar(parts) {
   const next = P[i + 1], prev = P[i - 1];
   const html = `<nav class="gbar" aria-label="${esc(u('startTitle'))}"><div class="gsteps" aria-hidden="true">${P.map((s, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>
     <p><b>${esc(u('gStep').replace('{n}', i + 1))}:</b> ${esc(u(P[i].d))}</p>
-    <div class="gbtns">${prev ? `<a class="btn ghost" href="${prev.h}">${arrowB} ${esc(u('gBack'))}</a>` : ''}${next ? (A.stepDone && i < 4 && !A.stepDone(i) ? `<span class="gtodo">🔒 ${esc(u('gTodo'))}: ${esc(u('need' + i))}</span>` : `<a class="btn" href="${next.h}">${esc(u('gNext'))}: ${esc(u(next.n))} ${arrowF}</a>`) : `<span class="gdone">${esc(u('gDone'))}</span>`}<button type="button" class="btn ghost" id="gExit">${esc(u('gExit')).replace(/ (.+)$/, '<span class="gx"> $1</span>')}</button></div></nav>`;
+    <div class="gbtns">${prev ? `<a class="btn ghost" href="${prev.h}">${arrowB} ${esc(u('gBack'))}</a>` : ''}${next ? (A.locksOn && A.locksOn() && i < 4 && !A.stepDone(i) ? `<span class="gtodo">🔒 ${esc(u('gTodo'))}: ${esc(u('need' + i))}</span>` : `<a class="btn" href="${next.h}">${esc(u('gNext'))}: ${esc(u(next.n))} ${arrowF}</a>`) : `<span class="gdone">${esc(u('gDone'))}</span>`}<button type="button" class="btn ghost" id="gExit">${esc(u('gExit')).replace(/ (.+)$/, '<span class="gx"> $1</span>')}</button></div></nav>`;
   const app = $('app'); app.insertAdjacentHTML('afterbegin', html);
   $('gExit').onclick = () => { gSet(false); guideBar(parts); if (A.placeSubNav) A.placeSubNav(parts); $('gShow').focus(); };
 }

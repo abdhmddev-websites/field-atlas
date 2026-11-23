@@ -99,13 +99,14 @@ A.stepDone = i => {
   if (i === 3) return !!(h.rm && h.rm.mid);
   return true;
 };
+A.locksOn = () => !(A.school && A.school.lockSteps === false); /* switch in config/school.js */
 A.stepState = i => {
   if (i > 4) return '';
-  for (let j = 0; j < i; j++) if (!A.stepDone(j)) return 'locked';
+  if (A.locksOn()) for (let j = 0; j < i; j++) if (!A.stepDone(j)) return 'locked';
   return i < 4 && A.stepDone(i) ? 'done' : '';
 };
 A.gate = si => {
-  if (si > 4) return null;
+  if (si > 4 || !A.locksOn()) return null;
   const j = [0, 1, 2, 3].find(k => k < si && !A.stepDone(k)); if (j === undefined) return null;
   const h = H(), { u, esc } = h, P = h.PATH[j];
   return `<section class="view card gate"><div class="gate-ico" aria-hidden="true">🔒</div><h1>${esc(u('gateT'))}</h1>
